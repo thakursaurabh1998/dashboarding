@@ -6,16 +6,29 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 
+	"github.com/thakursaurabh1998/dashboarding/server/connections"
 	"github.com/thakursaurabh1998/dashboarding/server/router"
 )
 
-type Server struct {
-	port string
-	e    *echo.Echo
-}
+// Server is a http server instance
+type (
+	Server struct {
+		port string
+		e    *echo.Echo
+		c    *connections.Connections
+	}
+)
 
-func Init(port string) *Server {
+// Init initializes a server
+func Init(port string) (s *Server) {
 	e := echo.New()
+	c := connections.Connect()
+
+	s = &Server{
+		c:    c,
+		e:    e,
+		port: port,
+	}
 
 	e.Use(middleware.AddTrailingSlash())
 
@@ -29,11 +42,15 @@ func Init(port string) *Server {
 		AllowMethods: []string{echo.GET, echo.HEAD, echo.PUT, echo.PATCH, echo.POST, echo.DELETE},
 	}))
 
-	router.Init(e)
+	router.Init(e, c)
 
-	return &Server{
-		port: port,
-		e:    e,
+	return
+}
+
+// Start runs the server on the specified port
+func (s *Server) Start() {
+	if err := s.e.Start(fmt.Sprintf(":%s", s.port)); err != nil {
+		s.e.Logger.Info("Shutting Down the server!")
 	}
 }
 
