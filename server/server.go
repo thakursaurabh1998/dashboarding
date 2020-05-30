@@ -1,6 +1,7 @@
 package server
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/labstack/echo/v4"
@@ -54,6 +55,10 @@ func (s *Server) Start() {
 	}
 }
 
-func (s *Server) Run() {
-	s.e.Logger.Fatal(s.e.Start(fmt.Sprintf(":%s", s.port)))
+// Stop stops the server
+func (s *Server) Stop(ctx *context.Context) {
+	if err := s.e.Shutdown(*ctx); err != nil {
+		s.e.Logger.Fatal(err)
+	}
+	connections.Disconnect(s.c)
 }
