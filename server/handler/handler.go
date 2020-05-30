@@ -1,5 +1,15 @@
 package handler
 
-func Hello() string {
-	return "Hello world! Dashing soon."
+type db string
+
+type Handler struct {
+	DB db
+}
+
+func NewHandler() (h *Handler) {
+	h = &Handler{
+		DB: "THIS IS MONGODB",
+	}
+
+	return
 }

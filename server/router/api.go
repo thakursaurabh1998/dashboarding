@@ -1,13 +1,12 @@
 package router
 
 import (
-	"net/http"
-
 	"github.com/labstack/echo/v4"
+
+	"github.com/thakursaurabh1998/dashboarding/server/handler"
 )
 
-func ApiInit(api *echo.Group) {
-	api.GET("/", func(c echo.Context) error {
-		return c.String(http.StatusInternalServerError, "In api")
-	})
+// APIInit initializes all the routes under /api
+func APIInit(api *echo.Group, h *handler.Handler) {
+	api.GET("/getName", h.GetName)
 }
