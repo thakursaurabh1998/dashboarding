@@ -7,10 +7,14 @@ import (
 	"time"
 
 	"github.com/thakursaurabh1998/dashboarding/server"
+	"github.com/thakursaurabh1998/dashboarding/server/utils"
 )
 
 func main() {
 	port := "5000"
+
+	logger := utils.InitLogger()
+	logger.Info("Starting the application")
 
 	s := server.Init(port)
 

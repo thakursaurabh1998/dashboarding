@@ -7,6 +7,7 @@ import (
 	"net/url"
 	"os"
 
+	"github.com/sirupsen/logrus"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
@@ -43,7 +44,7 @@ func mongoConnection() (*mongo.Database, *mongo.Client) {
 		log.Fatal(err)
 	}
 
-	fmt.Println("Connected to MongoDB!")
+	logrus.Info("Connected to MongoDB!")
 
 	db := client.Database(mongoDB)
 
@@ -67,5 +68,5 @@ func Disconnect(client *Connections) {
 		log.Fatal(err)
 	}
 
-	fmt.Println("Connection to MongoDB closed.")
+	logrus.Info("Connection to MongoDB closed.")
 }

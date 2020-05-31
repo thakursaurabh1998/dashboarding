@@ -9,6 +9,7 @@ import (
 
 	"github.com/thakursaurabh1998/dashboarding/server/connections"
 	"github.com/thakursaurabh1998/dashboarding/server/router"
+	"github.com/thakursaurabh1998/dashboarding/server/utils"
 )
 
 // Server is a http server instance
@@ -24,6 +25,7 @@ type (
 func Init(port string) (s *Server) {
 	e := echo.New()
 	c := connections.Connect()
+	e.HideBanner = true
 
 	s = &Server{
 		c:    c,
@@ -50,15 +52,17 @@ func Init(port string) (s *Server) {
 
 // Start runs the server on the specified port
 func (s *Server) Start() {
+	utils.Logger.Infof("Starting server on port : %s", s.port)
 	if err := s.e.Start(fmt.Sprintf(":%s", s.port)); err != nil {
-		s.e.Logger.Info("Shutting Down the server!")
+		utils.Logger.Info("Shutting Down the server!")
 	}
 }
 
 // Stop stops the server
 func (s *Server) Stop(ctx *context.Context) {
+	utils.Logger.Info("Shutting Down the server!")
 	if err := s.e.Shutdown(*ctx); err != nil {
-		s.e.Logger.Fatal(err)
+		utils.Logger.Fatal(err)
 	}
 	connections.Disconnect(s.c)
 }
