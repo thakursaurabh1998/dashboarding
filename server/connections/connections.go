@@ -22,7 +22,7 @@ func mongoConnection() (*mongo.Database, *mongo.Client) {
 	var mongoURI string
 	mongoHost := os.Getenv("MONGO_HOST")
 	mongoUser := os.Getenv("MONGO_USER")
-	mongoPass := url.QueryEscape(os.Getenv("MONGO_PASSS"))
+	mongoPass := url.QueryEscape(os.Getenv("MONGO_PASS"))
 	mongoDB := os.Getenv("MONGO_DB")
 	if mongoURI = os.Getenv("MONGO_URI"); mongoURI == "" {
 		mongoURI = fmt.Sprintf("mongodb+srv://%s:%s@%s/%s?retryWrites=true&w=majority", mongoUser, mongoPass, mongoHost, mongoDB)
