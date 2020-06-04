@@ -1,15 +1,14 @@
 package handler
 
-type db string
+import "github.com/thakursaurabh1998/dashboarding/server/store"
 
 type Handler struct {
-	DB db
+	userStore store.UserStore
 }
 
-func NewHandler() (h *Handler) {
+func NewHandler(us store.UserStore) (h *Handler) {
 	h = &Handler{
-		DB: "THIS IS MONGODB",
+		us,
 	}
-
 	return
 }
