@@ -15,6 +15,7 @@ const useStyles = createUseStyles({
     transitionTimingFunction: 'ease-in-out',
     padding: 0,
     '&:focus, &:hover': {
+      outline: 0,
       boxShadow: '1px 4px 5px 1px rgba(0, 0, 0, 0.1)',
     },
     '&:active': {
