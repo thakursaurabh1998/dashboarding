@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { MouseEvent } from 'react';
 import { createUseStyles } from 'react-jss';
 
 const useStyles = createUseStyles({
@@ -49,12 +49,25 @@ const useStyles = createUseStyles({
   },
 });
 
+function handleSignIn(event: MouseEvent) {
+  const CLIENT_ID = process.env.REACT_APP_CLIENT_ID;
+  const REDIRECT_URL = `${process.env.REACT_APP_API_URI}/auth/callback`;
+  const SCOPE = 'email profile';
+  const uri = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${CLIENT_ID}&scope=${SCOPE}&redirect_uri=${REDIRECT_URL}&response_type=code`;
+  window.location.replace(uri);
+}
+
 export default function Login() {
   const classes = useStyles();
 
   return (
     <div className={classes.loginPage}>
-      <button id="googleLogin" type="button" className={classes.googleButton}>
+      <button
+        onClick={handleSignIn}
+        id="googleLogin"
+        type="button"
+        className={classes.googleButton}
+      >
         <span className={classes.googleButtonIcon}>
           <svg viewBox="0 0 366 372" xmlns="http://www.w3.org/2000/svg">
             <path
