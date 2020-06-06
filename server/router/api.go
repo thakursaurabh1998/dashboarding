@@ -9,6 +9,6 @@ import (
 // APIInit initializes all the routes under /api
 func APIInit(api *echo.Group, h *handler.Handler) {
 	// CustomValidator provided by echo can be used here
-	api.GET("/getUser", h.GetUser)
-	api.PUT("/saveUser", h.SaveUser)
+	api.GET("/user", h.GetUser)
+	api.PUT("/user", h.SaveUser)
 }

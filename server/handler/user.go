@@ -7,13 +7,6 @@ import (
 	"github.com/thakursaurabh1998/dashboarding/server/utils"
 )
 
-type (
-	// User handlers
-	User interface {
-		GetName(echo.Context) error
-	}
-)
-
 // GetUser returns a users name from the id provided in query param
 func (h *Handler) GetUser(c echo.Context) error {
 	email := c.QueryParam("email")
@@ -23,7 +16,7 @@ func (h *Handler) GetUser(c echo.Context) error {
 	userData, err := h.userStore.GetUser(email)
 	if err != nil {
 		utils.Logger.Error(err)
-		return c.JSON(http.StatusInternalServerError, echo.Map{"success": false})
+		return c.JSON(http.StatusNotFound, createRes(false, nil, nil, http.StatusText(http.StatusNotFound)))
 	}
 	return c.JSON(http.StatusOK, userData)
 }
@@ -34,14 +27,14 @@ func (h *Handler) SaveUser(c echo.Context) error {
 	if err := c.Bind(&m); err != nil {
 		return err
 	}
-	name, email := m["name"].(string), m["email"].(string)
-	if name == "" || email == "" {
-		return c.String(http.StatusBadRequest, http.StatusText(http.StatusBadRequest))
+	name, email := m["name"], m["email"]
+	if name == nil || email == nil {
+		return c.JSON(http.StatusBadRequest, createRes(false, nil, []string{"Keys missing in body"}, http.StatusText(http.StatusBadRequest)))
 	}
-	data, err := h.userStore.SaveUser(name, email)
+	data, err := h.userStore.SaveUser(name.(string), email.(string))
 	if err != nil {
 		utils.Logger.Error(err)
-		return c.JSON(http.StatusInternalServerError, echo.Map{"success": false})
+		return c.JSON(http.StatusInternalServerError, createRes(false, nil, []string{"Error while saving user data"}, http.StatusText(http.StatusInternalServerError)))
 	}
-	return c.JSON(http.StatusOK, data)
+	return c.JSON(http.StatusOK, createRes(true, data, nil, ""))
 }
