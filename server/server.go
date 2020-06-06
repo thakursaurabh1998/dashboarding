@@ -3,6 +3,7 @@ package server
 import (
 	"context"
 	"fmt"
+	"net/http"
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
@@ -42,7 +43,7 @@ func Init(port string) (s *Server) {
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
 		AllowOrigins: []string{"*"},
 		AllowHeaders: []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept, echo.HeaderAuthorization},
-		AllowMethods: []string{echo.GET, echo.HEAD, echo.PUT, echo.PATCH, echo.POST, echo.DELETE},
+		AllowMethods: []string{http.MethodGet, http.MethodHead, http.MethodPut, http.MethodPost, http.MethodDelete},
 	}))
 
 	router.Init(e, c)
@@ -54,7 +55,7 @@ func Init(port string) (s *Server) {
 func (s *Server) Start() {
 	utils.Logger.Infof("Starting server on port : %s", s.port)
 	if err := s.e.Start(fmt.Sprintf(":%s", s.port)); err != nil {
-		utils.Logger.Info("Shutting Down the server!")
+		utils.Logger.Info("Error Interrupt in server!")
 	}
 }
 
