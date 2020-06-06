@@ -10,5 +10,6 @@ import (
 func Init(e *echo.Echo, c *connections.Connections) {
 	userStore := store.NewUserStore(c.Db)
 	h := handler.NewHandler(userStore)
-	APIInit(e.Group("/api"), h)
+	apiInit(e.Group("/api"), h)
+	authInit(e.Group("/auth"), h)
 }

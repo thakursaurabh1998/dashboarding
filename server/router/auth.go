@@ -7,8 +7,7 @@ import (
 )
 
 // APIInit initializes all the routes under /api
-func apiInit(api *echo.Group, h *handler.Handler) {
+func authInit(api *echo.Group, h *handler.Handler) {
 	// CustomValidator provided by echo can be used here
-	api.GET("/user", h.GetUser)
-	api.PUT("/user", h.SaveUser)
+	api.GET("/callback", h.OAuthCallback)
 }
