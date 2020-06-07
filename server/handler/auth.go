@@ -72,10 +72,10 @@ func (h *Handler) OAuthCallback(c echo.Context) error {
 	picture := (*dt)["picture"].(string)
 	_, err = h.userStore.UpsertUser(name, email, picture, at)
 	if err != nil {
-		fmt.Println("HERERHHEHREHR")
 		utils.Logger.Error(err)
 		return c.JSON(http.StatusInternalServerError, createRes(false, nil, nil, http.StatusText(http.StatusInternalServerError)))
 	}
-	return c.Redirect(http.StatusTemporaryRedirect, fmt.Sprintf("%s/callback", uiURI))
-	// return c.JSON(http.StatusOK, createRes(true, []interface{}{upsertData, "User signed up"}, nil, ""))
+	// create jwt token for the app here and then send it
+	jwtToken := "thisisamerica"
+	return c.Redirect(http.StatusTemporaryRedirect, fmt.Sprintf("%s/callback?Authorization=%s", uiURI, jwtToken))
 }
