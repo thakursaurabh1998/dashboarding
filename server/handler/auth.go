@@ -22,7 +22,7 @@ type (
 func fetchAuthDetails(code string) (*authTokenResponse, error) {
 	clientID := os.Getenv("CLIENT_ID")
 	clientSecret := os.Getenv("CLIENT_SECRET")
-	apiURI := os.Getenv("REDIRECT_URI")
+	apiURI := os.Getenv("API_URI")
 	grantType := "authorization_code"
 	tokenURL := "https://www.googleapis.com/oauth2/v4/token"
 
@@ -31,7 +31,7 @@ func fetchAuthDetails(code string) (*authTokenResponse, error) {
 		"client_id":     clientID,
 		"client_secret": clientSecret,
 		"grant_type":    grantType,
-		"redirect_uri":  apiURI,
+		"redirect_uri":  fmt.Sprintf("%s/auth/callback", apiURI),
 	}
 
 	jsonValue, _ := json.Marshal(reqBody)
@@ -55,25 +55,27 @@ func fetchAuthDetails(code string) (*authTokenResponse, error) {
 
 // OAuthCallback returns a users name from the id provided in query param
 func (h *Handler) OAuthCallback(c echo.Context) error {
+	uiURI := os.Getenv("UI_URI")
 	code := c.QueryParam("code")
 	response, err := fetchAuthDetails(code)
 	if err != nil {
 		utils.Logger.Error(err)
-		return c.JSON(http.StatusBadRequest, createRes(true, nil, nil, http.StatusText(http.StatusBadRequest)))
+		return c.JSON(http.StatusBadRequest, createRes(false, nil, nil, http.StatusText(http.StatusBadRequest)))
 	}
 	dt, err := h.decodeToken(response.IDToken)
 	if err != nil {
 		panic(err)
 	}
-
 	at := response.AccessToken
 	name := (*dt)["name"].(string)
 	email := (*dt)["email"].(string)
 	picture := (*dt)["picture"].(string)
-	upsertData, err := h.userStore.UpsertUser(name, email, picture, at)
+	_, err = h.userStore.UpsertUser(name, email, picture, at)
 	if err != nil {
+		fmt.Println("HERERHHEHREHR")
 		utils.Logger.Error(err)
-		return c.JSON(http.StatusInternalServerError, createRes(true, nil, nil, http.StatusText(http.StatusInternalServerError)))
+		return c.JSON(http.StatusInternalServerError, createRes(false, nil, nil, http.StatusText(http.StatusInternalServerError)))
 	}
-	return c.JSON(http.StatusOK, createRes(true, []interface{}{upsertData, "User signed up"}, nil, ""))
+	return c.Redirect(http.StatusTemporaryRedirect, fmt.Sprintf("%s/callback", uiURI))
+	// return c.JSON(http.StatusOK, createRes(true, []interface{}{upsertData, "User signed up"}, nil, ""))
 }
