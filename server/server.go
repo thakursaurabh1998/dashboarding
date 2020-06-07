@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"os"
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
@@ -22,6 +23,20 @@ type (
 	}
 )
 
+func customHTTPErrorHandler(err error, c echo.Context) {
+	code := http.StatusInternalServerError
+	if he, ok := err.(*echo.HTTPError); ok {
+		code = he.Code
+	}
+	utils.Logger.Error(err)
+	email := os.Getenv("MAINTAINER_EMAIL")
+	if code == http.StatusInternalServerError {
+		c.JSON(code, echo.Map{"message": fmt.Sprintf("Our servers must have been tired by now, please email this to me at %s and I'll give them a boost", email)})
+	} else {
+		c.JSON(code, echo.Map{"message": fmt.Sprintf("Oopsie! Somethings wrong, email me at %s to find out", email)})
+	}
+}
+
 // Init initializes a server
 func Init(port string) (s *Server) {
 	e := echo.New()
@@ -34,7 +49,11 @@ func Init(port string) (s *Server) {
 		port: port,
 	}
 
-	e.Use(middleware.AddTrailingSlash())
+	e.Use(middleware.RemoveTrailingSlash())
+
+	e.HTTPErrorHandler = customHTTPErrorHandler
+	e.Use(middleware.Recover())
+	e.Static("/static", "server/static")
 
 	e.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
 		Format: "${uri} ${method} ${status} ${latency_human}\n",
