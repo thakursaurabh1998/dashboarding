@@ -21,20 +21,38 @@ func (h *Handler) GetUser(c echo.Context) error {
 	return c.JSON(http.StatusOK, userData)
 }
 
-// SaveUser saves the user to the database
-func (h *Handler) SaveUser(c echo.Context) error {
+// InsertUser saves the user to the database
+func (h *Handler) InsertUser(c echo.Context) error {
 	m := echo.Map{}
 	if err := c.Bind(&m); err != nil {
 		return err
 	}
-	name, email := m["name"], m["email"]
+	name, email, at, picture := m["name"], m["email"], m["at"], m["picture"]
 	if name == nil || email == nil {
 		return c.JSON(http.StatusBadRequest, createRes(false, nil, []string{"Keys missing in body"}, http.StatusText(http.StatusBadRequest)))
 	}
-	data, err := h.userStore.SaveUser(name.(string), email.(string))
+	data, err := h.userStore.InsertUser(name.(string), email.(string), picture.(string), at.(string))
 	if err != nil {
 		utils.Logger.Error(err)
 		return c.JSON(http.StatusInternalServerError, createRes(false, nil, []string{"Error while saving user data"}, http.StatusText(http.StatusInternalServerError)))
+	}
+	return c.JSON(http.StatusOK, createRes(true, data, nil, ""))
+}
+
+// UpsertUser updates or isnerts the user to the database
+func (h *Handler) UpsertUser(c echo.Context) error {
+	m := echo.Map{}
+	if err := c.Bind(&m); err != nil {
+		return err
+	}
+	name, email, at, picture := m["name"], m["email"], m["at"], m["picture"]
+	if name == nil || email == nil || at == nil || picture == nil {
+		return c.JSON(http.StatusBadRequest, createRes(false, nil, []string{"Keys missing in body"}, http.StatusText(http.StatusBadRequest)))
+	}
+	data, err := h.userStore.UpsertUser(name.(string), email.(string), picture.(string), at.(string))
+	if err != nil {
+		utils.Logger.Error(err)
+		return c.JSON(http.StatusInternalServerError, createRes(false, nil, []string{"Error while updating user data"}, http.StatusText(http.StatusInternalServerError)))
 	}
 	return c.JSON(http.StatusOK, createRes(true, data, nil, ""))
 }

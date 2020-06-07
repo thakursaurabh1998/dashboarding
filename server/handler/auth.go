@@ -62,6 +62,18 @@ func (h *Handler) OAuthCallback(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, createRes(true, nil, nil, http.StatusText(http.StatusBadRequest)))
 	}
 	dt, err := h.decodeToken(response.IDToken)
-	fmt.Println(*dt, err)
-	return c.JSON(http.StatusOK, createRes(true, nil, nil, ""))
+	if err != nil {
+		panic(err)
+	}
+
+	at := response.AccessToken
+	name := (*dt)["name"].(string)
+	email := (*dt)["email"].(string)
+	picture := (*dt)["picture"].(string)
+	upsertData, err := h.userStore.UpsertUser(name, email, picture, at)
+	if err != nil {
+		utils.Logger.Error(err)
+		return c.JSON(http.StatusInternalServerError, createRes(true, nil, nil, http.StatusText(http.StatusInternalServerError)))
+	}
+	return c.JSON(http.StatusOK, createRes(true, []interface{}{upsertData, "User signed up"}, nil, ""))
 }

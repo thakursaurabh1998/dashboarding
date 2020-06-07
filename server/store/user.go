@@ -7,6 +7,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 type (
@@ -16,7 +17,8 @@ type (
 	// UserStore is an interface for user functions
 	UserStore interface {
 		GetUser(email string) (*models.User, error)
-		SaveUser(name string, email string) (*mongo.InsertOneResult, error)
+		InsertUser(name string, email string, picture string, at string) (*mongo.InsertOneResult, error)
+		UpsertUser(name string, email string, picture string, at string) (*mongo.UpdateResult, error)
 	}
 )
 
@@ -35,7 +37,27 @@ func (us *userStore) GetUser(email string) (*models.User, error) {
 	return &userData, nil
 }
 
-func (us *userStore) SaveUser(name string, email string) (*mongo.InsertOneResult, error) {
-	user := models.User{Name: name, Email: email, ForeignID: "hello", ID: primitive.NewObjectID()}
+func (us *userStore) InsertUser(name string, email string, picture string, at string) (*mongo.InsertOneResult, error) {
+	user := models.User{
+		Name:        name,
+		Email:       email,
+		ID:          primitive.NewObjectID(),
+		AccessToken: at,
+		PictureURL:  picture,
+	}
 	return us.db.Collection("users").InsertOne(context.TODO(), user)
+}
+
+func (us *userStore) UpsertUser(name string, email string, picture string, at string) (*mongo.UpdateResult, error) {
+	filter := bson.D{{"email", email}}
+	update := bson.D{
+		{"$set", bson.D{
+			{"name", name},
+			{"picture", picture},
+			{"accessToken", at},
+		}},
+	}
+	upsert := true
+	opt := &options.UpdateOptions{Upsert: &upsert}
+	return us.db.Collection("users").UpdateOne(context.TODO(), filter, update, opt)
 }
