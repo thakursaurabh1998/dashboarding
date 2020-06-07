@@ -53,10 +53,10 @@ func Init(port string) (s *Server) {
 
 	e.HTTPErrorHandler = customHTTPErrorHandler
 	e.Use(middleware.Recover())
-	e.Static("/static", "server/static")
+	// e.Static("/static", "server/static")
 
 	e.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
-		Format: "${uri} ${method} ${status} ${latency_human}\n",
+		Format: "${method} ${status} ${latency_human} ${uri}\n",
 	}))
 
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{

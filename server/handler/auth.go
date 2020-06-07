@@ -9,19 +9,23 @@ import (
 	"os"
 
 	"github.com/labstack/echo/v4"
+	"github.com/thakursaurabh1998/dashboarding/server/utils"
 )
 
-// OAuthCallback returns a users name from the id provided in query param
-func (h *Handler) OAuthCallback(c echo.Context) error {
-	m := echo.Map{}
-	if err := c.Bind(&m); err != nil {
-		return err
+type (
+	authTokenResponse struct {
+		AccessToken string `json:"access_token"`
+		IDToken     string `json:"id_token"`
 	}
+)
+
+func fetchAuthDetails(code string) (*authTokenResponse, error) {
 	clientID := os.Getenv("CLIENT_ID")
 	clientSecret := os.Getenv("CLIENT_SECRET")
 	apiURI := os.Getenv("REDIRECT_URI")
 	grantType := "authorization_code"
-	code := c.QueryParam("code")
+	tokenURL := "https://www.googleapis.com/oauth2/v4/token"
+
 	reqBody := map[string]string{
 		"code":          code,
 		"client_id":     clientID,
@@ -29,20 +33,35 @@ func (h *Handler) OAuthCallback(c echo.Context) error {
 		"grant_type":    grantType,
 		"redirect_uri":  apiURI,
 	}
-	tokenURL := "https://www.googleapis.com/oauth2/v4/token"
+
 	jsonValue, _ := json.Marshal(reqBody)
 	resp, err := http.Post(tokenURL, "application/json", bytes.NewBuffer(jsonValue))
 	if err != nil {
-		fmt.Print(err)
+		return nil, err
 	}
 	defer resp.Body.Close()
-	// if resp.StatusCode == http.StatusOK {
 	bodyBytes, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		fmt.Print(err)
-	}
 	bodyString := string(bodyBytes)
-	fmt.Print(bodyString)
-	// }
-	return c.JSON(http.StatusOK, createRes(true, nil, nil, http.StatusText(http.StatusOK)))
+	if err != nil {
+		return nil, err
+	}
+	if resp.StatusCode == http.StatusOK {
+		var response authTokenResponse
+		json.Unmarshal([]byte(bodyString), &response)
+		return &response, nil
+	}
+	return nil, fmt.Errorf("Bad Request on google auth API")
+}
+
+// OAuthCallback returns a users name from the id provided in query param
+func (h *Handler) OAuthCallback(c echo.Context) error {
+	code := c.QueryParam("code")
+	response, err := fetchAuthDetails(code)
+	if err != nil {
+		utils.Logger.Error(err)
+		return c.JSON(http.StatusBadRequest, createRes(true, nil, nil, http.StatusText(http.StatusBadRequest)))
+	}
+	dt, err := h.decodeToken(response.IDToken)
+	fmt.Println(*dt, err)
+	return c.JSON(http.StatusOK, createRes(true, nil, nil, ""))
 }
