@@ -1,14 +1,17 @@
-import React from 'react';
-import PropTypes, { InferProps } from 'prop-types';
+import React, { useState } from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
 
 import './static/App.css';
-import Login from './components/Login';
 import Home from './components/Home';
+import Login from './components/Login';
+import LoginPopup from './components/LoginPopup';
+import { getAuthorizationToken } from './utils/localStorage';
 
-export default function App({
-  isAuthenticated,
-}: InferProps<typeof App.propTypes>) {
+export default function App() {
+  const [isAuthenticated, setIsAuthenticated] = useState(
+    !!getAuthorizationToken()
+  );
+
   return (
     <div className="App">
       <Switch>
@@ -19,17 +22,16 @@ export default function App({
         />
         <Route
           path="/login"
-          render={() => (isAuthenticated ? <Redirect to="/" /> : <Login />)}
+          render={() =>
+            isAuthenticated ? (
+              <Redirect to="/" />
+            ) : (
+              <Login updateAuthenticationState={setIsAuthenticated} />
+            )
+          }
         />
+        <Route exact path="/callback" component={LoginPopup} />
       </Switch>
     </div>
   );
 }
-
-App.propTypes = {
-  isAuthenticated: PropTypes.bool.isRequired,
-};
-
-App.defaultProps = {
-  isAuthenticated: false,
-};

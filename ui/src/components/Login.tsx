@@ -1,5 +1,8 @@
 import React, { MouseEvent } from 'react';
 import { createUseStyles } from 'react-jss';
+import PropTypes, { InferProps } from 'prop-types';
+
+import { setAuthorizationToken } from '../utils/localStorage';
 
 const useStyles = createUseStyles({
   googleButton: {
@@ -49,21 +52,40 @@ const useStyles = createUseStyles({
   },
 });
 
-function handleSignIn(event: MouseEvent) {
+function handleSignIn(event: MouseEvent, updateAuthenticationState: Function) {
   const CLIENT_ID = process.env.REACT_APP_CLIENT_ID;
   const REDIRECT_URL = `${process.env.REACT_APP_API_URI}/auth/callback`;
   const SCOPE = 'email profile';
+  const width = 400;
+  const height = 600;
+  const y = window.top.outerHeight / 2 + window.top.screenY - height / 2;
+  const x = window.top.outerWidth / 2 + window.top.screenX - width / 2;
   const uri = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${CLIENT_ID}&scope=${SCOPE}&redirect_uri=${REDIRECT_URL}&response_type=code`;
-  window.location.replace(uri);
+  window.open(
+    uri,
+    'LoginWindow',
+    `height=${height},width=${width},top=${y},left=${x}`
+  );
+  window.addEventListener(
+    'message',
+    (e) => {
+      if (e.data && e.data.Authorization) {
+        setAuthorizationToken(e.data.Authorization);
+        updateAuthenticationState(true);
+      }
+    },
+    false
+  );
 }
 
-export default function Login() {
+export default function Login({
+  updateAuthenticationState,
+}: InferProps<typeof Login.propTypes>) {
   const classes = useStyles();
-
   return (
     <div className={classes.loginPage}>
       <button
-        onClick={handleSignIn}
+        onClick={(e) => handleSignIn(e, updateAuthenticationState)}
         id="googleLogin"
         type="button"
         className={classes.googleButton}
@@ -96,3 +118,7 @@ export default function Login() {
     </div>
   );
 }
+
+Login.propTypes = {
+  updateAuthenticationState: PropTypes.func.isRequired,
+};
