@@ -49,7 +49,13 @@ func (h *Handler) UpsertUser(c echo.Context) error {
 	if name == nil || email == nil || at == nil || picture == nil {
 		return c.JSON(http.StatusBadRequest, createRes(false, nil, []string{"Keys missing in body"}, http.StatusText(http.StatusBadRequest)))
 	}
-	data, err := h.userStore.UpsertUser(name.(string), email.(string), picture.(string), at.(string))
+	userData := map[string]string{
+		"at":      at.(string),
+		"name":    name.(string),
+		"email":   email.(string),
+		"picture": picture.(string),
+	}
+	data, err := h.userStore.UpsertUser(userData)
 	if err != nil {
 		utils.Logger.Error(err)
 		return c.JSON(http.StatusInternalServerError, createRes(false, nil, []string{"Error while updating user data"}, http.StatusText(http.StatusInternalServerError)))

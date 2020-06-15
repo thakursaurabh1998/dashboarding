@@ -66,16 +66,23 @@ func (h *Handler) OAuthCallback(c echo.Context) error {
 	if err != nil {
 		panic(err)
 	}
-	at := response.AccessToken
-	name := (*dt)["name"].(string)
-	email := (*dt)["email"].(string)
-	picture := (*dt)["picture"].(string)
-	_, err = h.userStore.UpsertUser(name, email, picture, at)
+
+	userData := map[string]string{
+		"at":      response.AccessToken,
+		"name":    (*dt)["name"].(string),
+		"email":   (*dt)["email"].(string),
+		"picture": (*dt)["picture"].(string),
+	}
+	_, err = h.userStore.UpsertUser(userData)
 	if err != nil {
 		utils.Logger.Error(err)
 		return c.JSON(http.StatusInternalServerError, createRes(false, nil, nil, http.StatusText(http.StatusInternalServerError)))
 	}
 	// create jwt token for the app here and then send it
-	jwtToken := "thisisamerica"
+	jwtToken, err := h.createToken(userData)
+	if err != nil {
+		utils.Logger.Error(err)
+		return c.JSON(http.StatusInternalServerError, createRes(false, nil, nil, http.StatusText(http.StatusInternalServerError)))
+	}
 	return c.Redirect(http.StatusTemporaryRedirect, fmt.Sprintf("%s/callback?Authorization=%s", uiURI, jwtToken))
 }

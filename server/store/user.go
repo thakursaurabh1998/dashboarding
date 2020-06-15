@@ -18,7 +18,7 @@ type (
 	UserStore interface {
 		GetUser(email string) (*models.User, error)
 		InsertUser(name string, email string, picture string, at string) (*mongo.InsertOneResult, error)
-		UpsertUser(name string, email string, picture string, at string) (*mongo.UpdateResult, error)
+		UpsertUser(userData map[string]string) (*mongo.UpdateResult, error)
 	}
 )
 
@@ -48,7 +48,12 @@ func (us *userStore) InsertUser(name string, email string, picture string, at st
 	return us.db.Collection("users").InsertOne(context.TODO(), user)
 }
 
-func (us *userStore) UpsertUser(name string, email string, picture string, at string) (*mongo.UpdateResult, error) {
+func (us *userStore) UpsertUser(userData map[string]string) (*mongo.UpdateResult, error) {
+	at := userData["at"]
+	name := userData["name"]
+	email := userData["email"]
+	picture := userData["picture"]
+
 	filter := bson.D{{"email", email}}
 	update := bson.D{
 		{"$set", bson.D{
