@@ -1,4 +1,4 @@
-export function setAuthorizationToken(token: string) {
+export function setAuthorizationToken(token) {
   window.localStorage.setItem('Authorization', token);
 }
 

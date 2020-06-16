@@ -6,11 +6,8 @@ export default function LoginPopup() {
     if (window.opener) {
       const querystring = window.location.search;
       const searchParams = new URLSearchParams(querystring);
-      type params = {
-        [key: string]: string;
-      };
-      const paramObject: params = {};
-      searchParams.forEach(function (value: string, key: string) {
+      const paramObject = {};
+      searchParams.forEach(function (value, key) {
         paramObject[key] = value;
       });
       // send them to the opening window

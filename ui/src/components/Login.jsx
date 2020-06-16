@@ -1,6 +1,6 @@
-import React, { MouseEvent } from 'react';
+import React from 'react';
 import { createUseStyles } from 'react-jss';
-import PropTypes, { InferProps } from 'prop-types';
+import PropTypes from 'prop-types';
 
 import { setAuthorizationToken } from '../utils/localStorage';
 
@@ -52,7 +52,7 @@ const useStyles = createUseStyles({
   },
 });
 
-function handleSignIn(event: MouseEvent, updateAuthenticationState: Function) {
+function handleSignIn(event, updateAuthenticationState) {
   const CLIENT_ID = process.env.REACT_APP_CLIENT_ID;
   const REDIRECT_URL = `${process.env.REACT_APP_API_URI}/auth/callback`;
   const SCOPE = 'email profile';
@@ -78,9 +78,7 @@ function handleSignIn(event: MouseEvent, updateAuthenticationState: Function) {
   );
 }
 
-export default function Login({
-  updateAuthenticationState,
-}: InferProps<typeof Login.propTypes>) {
+export default function Login({ updateAuthenticationState }) {
   const classes = useStyles();
   return (
     <div className={classes.loginPage}>
