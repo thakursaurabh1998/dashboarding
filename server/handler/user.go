@@ -9,7 +9,9 @@ import (
 
 // GetUser returns a users name from the id provided in query param
 func (h *Handler) GetUser(c echo.Context) error {
-	email := c.QueryParam("email")
+	userDataMap := utils.GetUserDataFromContext(&c)
+	email := (*userDataMap)["email"].(string)
+
 	if email == "" {
 		return c.String(http.StatusBadRequest, "email missing in qpm")
 	}
