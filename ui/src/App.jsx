@@ -5,7 +5,7 @@ import './static/App.css';
 import Home from './components/Home';
 import Login from './components/Login';
 import LoginPopup from './components/LoginPopup';
-import { getAuthorizationToken } from './utils/localStorage';
+import { getAuthorizationToken } from './utils/LocalStorage';
 
 export default function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(
