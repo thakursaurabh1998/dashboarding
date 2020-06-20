@@ -32,7 +32,6 @@ function getRoutes() {
 }
 
 export default function InternalRouter() {
-  console.log(getRoutes());
   return (
     <Suspense fallback={<Loading />}>
       <Switch>{[getRoutes()]}</Switch>

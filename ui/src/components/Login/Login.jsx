@@ -2,7 +2,7 @@ import React from 'react';
 import { createUseStyles } from 'react-jss';
 import PropTypes from 'prop-types';
 
-import { setAuthorizationToken } from '../utils/LocalStorage';
+import { setAuthorizationToken } from '../../utils/LocalStorage';
 
 const useStyles = createUseStyles({
   googleButton: {

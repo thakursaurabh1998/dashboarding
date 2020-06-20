@@ -2,10 +2,11 @@ import React, { useState } from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
 
 import './static/App.css';
-import Home from './components/Home';
-import Login from './components/Login';
-import LoginPopup from './components/LoginPopup';
+import Login from './components/Login/Login';
+import LoginPopup from './components/Login/LoginPopup';
 import { getAuthorizationToken } from './utils/LocalStorage';
+import InternalRouter from './components/Utils/InternalRouter';
+import RoutesEnum from './constants/RoutesEnum';
 
 export default function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(
@@ -16,12 +17,13 @@ export default function App() {
     <div className="App">
       <Switch>
         <Route
-          exact
-          path="/"
-          render={() => (isAuthenticated ? <Home /> : <Redirect to="/login" />)}
+          path={RoutesEnum.ROOT}
+          render={() =>
+            isAuthenticated ? <InternalRouter /> : <Redirect to="/login" />
+          }
         />
         <Route
-          path="/login"
+          path={RoutesEnum.LOGIN}
           render={() =>
             isAuthenticated ? (
               <Redirect to="/" />
@@ -30,7 +32,7 @@ export default function App() {
             )
           }
         />
-        <Route exact path="/callback" component={LoginPopup} />
+        <Route exact path={RoutesEnum.CALLBACK} component={LoginPopup} />
       </Switch>
     </div>
   );
