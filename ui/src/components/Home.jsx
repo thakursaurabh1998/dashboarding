@@ -11,16 +11,14 @@ export default function Home() {
     dispatch(UserActions.getUser());
   }, [dispatch]);
 
-  const { name, pictureUrl } = useSelector((state) => ({
+  const { name } = useSelector((state) => ({
     name: state.user?.name,
-    pictureUrl: state.user?.pictureUrl,
   }));
 
   return (
-    <header className="App-header">
+    <header>
       <img src={logo} className="App-logo" alt="logo" />
-      <h1>Welcome "{name}"</h1>
-      <img src={pictureUrl} alt="profile"/>
+      <h1>Welcome {name}</h1>
       <p>Soon going to dashboard :)</p>
     </header>
   );

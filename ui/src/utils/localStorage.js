@@ -5,3 +5,7 @@ export function setAuthorizationToken(token) {
 export function getAuthorizationToken() {
   return window.localStorage.getItem('Authorization');
 }
+
+export function deleteAuthorizationToken() {
+  return window.localStorage.removeItem('Authorization');
+}

@@ -1,39 +1,37 @@
-import React, { useState } from 'react';
-import { Switch, Route, Redirect } from 'react-router-dom';
+import React from 'react';
+import { Route, Redirect } from 'react-router-dom';
 
+import 'antd/dist/antd.css';
 import './static/App.css';
-import Login from './components/Login/Login';
-import LoginPopup from './components/Login/LoginPopup';
-import { getAuthorizationToken } from './utils/LocalStorage';
 import InternalRouter from './components/Utils/InternalRouter';
 import RoutesEnum from './constants/RoutesEnum';
+import Navbar from './components/Navbar/Navbar';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import * as UserActions from './stores/user/UserActions';
 
 export default function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState(
-    !!getAuthorizationToken()
-  );
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(UserActions.checkUserAuth());
+  }, [dispatch]);
+
+  const { isAuthenticated } = useSelector((state) => ({
+    isAuthenticated: state.user?.isAuthenticated,
+  }));
 
   return (
     <div className="App">
-      <Switch>
-        <Route
-          path={RoutesEnum.ROOT}
-          render={() =>
-            isAuthenticated ? <InternalRouter /> : <Redirect to="/login" />
-          }
-        />
-        <Route
-          path={RoutesEnum.LOGIN}
-          render={() =>
-            isAuthenticated ? (
-              <Redirect to="/" />
-            ) : (
-              <Login updateAuthenticationState={setIsAuthenticated} />
-            )
-          }
-        />
-        <Route exact path={RoutesEnum.CALLBACK} component={LoginPopup} />
-      </Switch>
+      {isAuthenticated && <Navbar />}
+      <Route exact path={RoutesEnum.ROOT}>
+        {isAuthenticated ? (
+          <Redirect to={RoutesEnum.HOME} />
+        ) : (
+          <Redirect to={RoutesEnum.LOGIN} />
+        )}
+      </Route>
+      <InternalRouter />
     </div>
   );
 }

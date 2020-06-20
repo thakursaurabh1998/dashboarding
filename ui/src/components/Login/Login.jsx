@@ -1,8 +1,11 @@
 import React from 'react';
 import { createUseStyles } from 'react-jss';
-import PropTypes from 'prop-types';
 
+import * as UserActions from '../../stores/user/UserActions';
 import { setAuthorizationToken } from '../../utils/LocalStorage';
+import { useDispatch } from 'react-redux';
+import { useHistory } from 'react-router-dom';
+import RoutesEnum from '../../constants/RoutesEnum';
 
 const useStyles = createUseStyles({
   googleButton: {
@@ -52,38 +55,47 @@ const useStyles = createUseStyles({
   },
 });
 
-function handleSignIn(event, updateAuthenticationState) {
-  const CLIENT_ID = process.env.REACT_APP_CLIENT_ID;
-  const REDIRECT_URL = `${process.env.REACT_APP_API_URI}/auth/callback`;
-  const SCOPE = 'email profile';
-  const width = 400;
-  const height = 600;
-  const y = window.top.outerHeight / 2 + window.top.screenY - height / 2;
-  const x = window.top.outerWidth / 2 + window.top.screenX - width / 2;
-  const uri = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${CLIENT_ID}&scope=${SCOPE}&redirect_uri=${REDIRECT_URL}&response_type=code`;
-  window.open(
-    uri,
-    'LoginWindow',
-    `height=${height},width=${width},top=${y},left=${x}`
-  );
-  window.addEventListener(
-    'message',
-    (e) => {
-      if (e.data && e.data.Authorization) {
-        setAuthorizationToken(e.data.Authorization);
-        updateAuthenticationState(true);
-      }
-    },
-    false
-  );
-}
-
-export default function Login({ updateAuthenticationState }) {
+export default function Login() {
   const classes = useStyles();
+  const dispatch = useDispatch();
+  const history = useHistory();
+
+  const updateAuthenticationState = (value) => {
+    console.log(value);
+    dispatch(UserActions.setUserAuth(value));
+  };
+
+  const handleSignIn = () => {
+    const CLIENT_ID = process.env.REACT_APP_CLIENT_ID;
+    const REDIRECT_URL = `${process.env.REACT_APP_API_URI}/auth/callback`;
+    const SCOPE = 'email profile';
+    const width = 400;
+    const height = 600;
+    const y = window.top.outerHeight / 2 + window.top.screenY - height / 2;
+    const x = window.top.outerWidth / 2 + window.top.screenX - width / 2;
+    const uri = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${CLIENT_ID}&scope=${SCOPE}&redirect_uri=${REDIRECT_URL}&response_type=code`;
+    window.open(
+      uri,
+      'LoginWindow',
+      `height=${height},width=${width},top=${y},left=${x}`
+    );
+    window.addEventListener(
+      'message',
+      (e) => {
+        if (e.data && e.data.Authorization) {
+          setAuthorizationToken(e.data.Authorization);
+          updateAuthenticationState(true);
+          history.push(RoutesEnum.HOME);
+        }
+      },
+      false
+    );
+  };
+
   return (
     <div className={classes.loginPage}>
       <button
-        onClick={(e) => handleSignIn(e, updateAuthenticationState)}
+        onClick={handleSignIn}
         id="googleLogin"
         type="button"
         className={classes.googleButton}
@@ -116,7 +128,3 @@ export default function Login({ updateAuthenticationState }) {
     </div>
   );
 }
-
-Login.propTypes = {
-  updateAuthenticationState: PropTypes.func.isRequired,
-};

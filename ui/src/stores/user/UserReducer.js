@@ -10,6 +10,19 @@ const userReducer = baseReducer(initialState, {
       ...action.payload?.data,
     };
   },
+  [UserActions.CHECK_USER_AUTH_FINISHED](state, action) {
+    return {
+      ...state,
+      isAuthenticated: action.payload,
+    };
+  },
+  [UserActions.SET_USER_AUTH_FINISHED](state, action) {
+    console.log(action)
+    return {
+      ...state,
+      isAuthenticated: action.payload,
+    };
+  },
 });
 
 export default userReducer;

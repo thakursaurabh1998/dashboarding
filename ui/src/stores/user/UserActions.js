@@ -15,3 +15,30 @@ export function getUser() {
     );
   };
 }
+
+export const CHECK_USER_AUTH = 'UserActions.CHECK_USER_AUTH';
+export const CHECK_USER_AUTH_FINISHED = 'UserActions.CHECK_USER_AUTH_FINISHED';
+
+export function checkUserAuth() {
+  return async (dispatch) => {
+    await ActionUtility.createThunkEffect(
+      dispatch,
+      CHECK_USER_AUTH,
+      UserEffect.checkUserAuth
+    );
+  };
+}
+
+export const SET_USER_AUTH = 'UserActions.SET_USER_AUTH';
+export const SET_USER_AUTH_FINISHED = 'UserActions.SET_USER_AUTH_FINISHED';
+
+export function setUserAuth(value) {
+  return async (dispatch) => {
+    await ActionUtility.createThunkEffect(
+      dispatch,
+      SET_USER_AUTH,
+      UserEffect.setUserAuth,
+      value
+    );
+  };
+}
