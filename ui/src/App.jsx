@@ -1,14 +1,12 @@
 import React from 'react';
-import { Route, Redirect } from 'react-router-dom';
 
 import 'antd/dist/antd.css';
 import './static/App.css';
-import InternalRouter from './components/Utils/InternalRouter';
-import RoutesEnum from './constants/RoutesEnum';
 import Navbar from './components/Navbar/Navbar';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import * as UserActions from './stores/user/UserActions';
+import RoutePage from './components/Extras/RoutePage';
 
 export default function App() {
   const dispatch = useDispatch();
@@ -23,15 +21,8 @@ export default function App() {
 
   return (
     <>
-      {isAuthenticated && <Navbar />}
-      <Route exact path={RoutesEnum.ROOT}>
-        {isAuthenticated ? (
-          <Redirect to={RoutesEnum.HOME} />
-        ) : (
-          <Redirect to={RoutesEnum.LOGIN} />
-        )}
-      </Route>
-      <InternalRouter />
+      <Navbar isAuthenticated={isAuthenticated} />
+      <RoutePage />
     </>
   );
 }

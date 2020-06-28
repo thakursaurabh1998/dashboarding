@@ -1,10 +1,11 @@
 import React, { lazy, Suspense } from 'react';
-import { Switch, Route } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { Switch, Route, Redirect } from 'react-router-dom';
 import RoutesEnum from '../../constants/RoutesEnum';
 import Create from '../Create/Create';
 import Loading from '../Extras/Loading';
-import Login from '../Login/Login';
 import LoginPopup from '../Login/LoginPopup';
+import NotFound from '../Extras/NotFound';
 
 const Home = lazy(() => import('../Home'));
 const Profile = lazy(() => import('../Profile/Profile'));
@@ -16,17 +17,18 @@ function NewRoute(path, component) {
   };
 }
 
-// All the routes go here
-const routes = [
+// All the open routes go here
+const openRoutes = [NewRoute(RoutesEnum.CALLBACK, LoginPopup)];
+
+// All the secure routes go here
+const secureRoutes = [
   NewRoute(RoutesEnum.HOME, Home),
-  NewRoute(RoutesEnum.LOGIN, Login),
   NewRoute(RoutesEnum.PROFILE, Profile),
-  NewRoute(RoutesEnum.CALLBACK, LoginPopup),
   NewRoute(RoutesEnum.CREATE, Create),
 ];
 
-function getRoutes() {
-  const finalRoutes = routes.map((route) => (
+function getRoutes(secure) {
+  const finalRoutes = (secure ? secureRoutes : openRoutes).map((route) => (
     <Route
       exact
       path={route.path}
@@ -38,9 +40,18 @@ function getRoutes() {
 }
 
 export default function InternalRouter() {
+  const { isAuthenticated } = useSelector((state) => ({
+    isAuthenticated: state.user?.isAuthenticated,
+  }));
+
   return (
     <Suspense fallback={<Loading />}>
-      <Switch>{[getRoutes()]}</Switch>
+      <Switch>
+        {[getRoutes(false)]}
+        {!isAuthenticated && <Redirect to={RoutesEnum.ROOT} />}
+        {[getRoutes(true)]}
+        <Route path="*" component={NotFound} />
+      </Switch>
     </Suspense>
   );
 }

@@ -3,7 +3,6 @@ const RoutesEnum = {
   CREATE: '/create',
   HOME: '/home',
   ROOT: '/',
-  LOGIN: '/login',
   PROFILE: '/profile',
 };
 

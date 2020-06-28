@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Menu, Avatar } from 'antd';
 import { LockOutlined, HomeFilled, UserOutlined } from '@ant-design/icons';
 import { useState } from 'react';
@@ -7,19 +7,24 @@ import { useHistory } from 'react-router-dom';
 import RoutesEnum from '../../constants/RoutesEnum';
 import { deleteAuthorizationToken } from '../../utils/LocalStorage';
 import * as UserActions from '../../stores/user/UserActions';
+import LoginButton from '../Login/LoginButton';
 
 const { SubMenu } = Menu;
 
-export default function Navbar() {
+export default function Navbar({ isAuthenticated }) {
   const [current, setCurrent] = useState('user');
   const history = useHistory();
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(UserActions.getUser());
+  }, [dispatch]);
 
   const handleClick = (e) => {
     setCurrent(e.key);
     switch (e.key) {
       case 'home':
-        history.push(RoutesEnum.ROOT);
+        history.push(RoutesEnum.HOME);
         break;
       case 'profile':
         history.push(RoutesEnum.PROFILE);
@@ -27,7 +32,7 @@ export default function Navbar() {
       case 'logout':
         dispatch(UserActions.setUserAuth(false));
         deleteAuthorizationToken();
-        history.push(RoutesEnum.LOGIN);
+        history.push(RoutesEnum.ROOT);
         break;
       default:
     }
@@ -40,17 +45,25 @@ export default function Navbar() {
   return (
     <Menu onClick={handleClick} selectedKeys={[current]} mode="horizontal">
       <Menu.Item key="home" icon={<HomeFilled />} />
-      <SubMenu
-        style={{ float: 'right', marginLeft: 10 }}
-        icon={<Avatar src={pictureUrl} />}
-      >
-        <Menu.Item key="profile" icon={<UserOutlined />}>
-          Profile
-        </Menu.Item>
-        <Menu.Item key="logout" icon={<LockOutlined />}>
-          Logout
-        </Menu.Item>
-      </SubMenu>
+      {isAuthenticated ? (
+        <SubMenu
+          style={{ float: 'right', marginLeft: 10 }}
+          icon={<Avatar src={pictureUrl} />}
+        >
+          <Menu.Item key="profile" icon={<UserOutlined />}>
+            Profile
+          </Menu.Item>
+          <Menu.Item key="logout" icon={<LockOutlined />}>
+            Logout
+          </Menu.Item>
+        </SubMenu>
+      ) : (
+        <Menu.Item
+          key="login"
+          style={{ float: 'right' }}
+          icon={<LoginButton />}
+        />
+      )}
     </Menu>
   );
 }
