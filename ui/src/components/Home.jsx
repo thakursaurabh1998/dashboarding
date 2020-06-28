@@ -3,6 +3,9 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import logo from '../static/logo.svg';
 import * as UserActions from '../stores/user/UserActions';
+import { Button } from 'antd';
+import { Link } from 'react-router-dom';
+import RoutesEnum from '../constants/RoutesEnum';
 
 export default function Home() {
   const dispatch = useDispatch();
@@ -16,10 +19,14 @@ export default function Home() {
   }));
 
   return (
-    <header>
+    <header className="App">
       <img src={logo} className="App-logo" alt="logo" />
       <h1>Welcome {name}</h1>
-      <p>Soon going to dashboard :)</p>
+      <Link to={RoutesEnum.CREATE}>
+        <Button type="primary" size="large">
+          Create Dashboard
+        </Button>
+      </Link>
     </header>
   );
 }

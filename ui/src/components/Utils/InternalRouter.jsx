@@ -1,6 +1,7 @@
 import React, { lazy, Suspense } from 'react';
 import { Switch, Route } from 'react-router-dom';
 import RoutesEnum from '../../constants/RoutesEnum';
+import Create from '../Create/Create';
 import Loading from '../Extras/Loading';
 import Login from '../Login/Login';
 import LoginPopup from '../Login/LoginPopup';
@@ -21,6 +22,7 @@ const routes = [
   NewRoute(RoutesEnum.LOGIN, Login),
   NewRoute(RoutesEnum.PROFILE, Profile),
   NewRoute(RoutesEnum.CALLBACK, LoginPopup),
+  NewRoute(RoutesEnum.CREATE, Create),
 ];
 
 function getRoutes() {

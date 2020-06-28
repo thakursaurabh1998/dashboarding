@@ -22,7 +22,7 @@ export default function App() {
   }));
 
   return (
-    <div className="App">
+    <>
       {isAuthenticated && <Navbar />}
       <Route exact path={RoutesEnum.ROOT}>
         {isAuthenticated ? (
@@ -32,6 +32,6 @@ export default function App() {
         )}
       </Route>
       <InternalRouter />
-    </div>
+    </>
   );
 }
