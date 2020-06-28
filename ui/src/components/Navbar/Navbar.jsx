@@ -17,8 +17,10 @@ export default function Navbar({ isAuthenticated }) {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(UserActions.getUser());
-  }, [dispatch]);
+    if (isAuthenticated) {
+      dispatch(UserActions.getUser());
+    }
+  }, [dispatch, isAuthenticated]);
 
   const handleClick = (e) => {
     setCurrent(e.key);
