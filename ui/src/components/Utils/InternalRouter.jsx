@@ -48,7 +48,7 @@ export default function InternalRouter() {
     <Suspense fallback={<Loading />}>
       <Switch>
         {[getRoutes(false)]}
-        {!isAuthenticated && <Redirect to={RoutesEnum.ROOT} />}
+        {isAuthenticated === false && <Redirect to={RoutesEnum.ROOT} />}
         {[getRoutes(true)]}
         <Route path="*" component={NotFound} />
       </Switch>

@@ -9,6 +9,8 @@ import RoutesEnum from '../../constants/RoutesEnum';
 
 const useStyles = createUseStyles({
   googleButton: {
+    float: 'right',
+    marginRight: 20,
     borderWidth: 0,
     background: '#f0f0f0',
     color: '#737373',
@@ -53,7 +55,6 @@ export default function LoginButton() {
   const history = useHistory();
 
   const updateAuthenticationState = (value) => {
-    console.log(value);
     dispatch(UserActions.setUserAuth(value));
   };
 

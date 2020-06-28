@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import RoutesEnum from '../../constants/RoutesEnum';
+import PropTypes from 'prop-types';
 import { deleteAuthorizationToken } from '../../utils/LocalStorage';
 import * as UserActions from '../../stores/user/UserActions';
 import LoginButton from '../Login/LoginButton';
@@ -60,12 +61,16 @@ export default function Navbar({ isAuthenticated }) {
           </Menu.Item>
         </SubMenu>
       ) : (
-        <Menu.Item
-          key="login"
-          style={{ float: 'right' }}
-          icon={<LoginButton />}
-        />
+        <LoginButton />
       )}
     </Menu>
   );
 }
+
+Navbar.propTypes = {
+  isAuthenticated: PropTypes.bool.isRequired,
+};
+
+Navbar.defaultProps = {
+  isAuthenticated: false,
+};
