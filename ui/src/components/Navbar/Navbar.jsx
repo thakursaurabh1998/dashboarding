@@ -1,12 +1,14 @@
 import React from 'react';
-import { Menu, Avatar, Button } from 'antd';
-import { LockOutlined, HomeFilled } from '@ant-design/icons';
+import { Menu, Avatar } from 'antd';
+import { LockOutlined, HomeFilled, UserOutlined } from '@ant-design/icons';
 import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import RoutesEnum from '../../constants/RoutesEnum';
 import { deleteAuthorizationToken } from '../../utils/LocalStorage';
 import * as UserActions from '../../stores/user/UserActions';
+
+const { SubMenu } = Menu;
 
 export default function Navbar() {
   const [current, setCurrent] = useState('user');
@@ -38,21 +40,17 @@ export default function Navbar() {
   return (
     <Menu onClick={handleClick} selectedKeys={[current]} mode="horizontal">
       <Menu.Item key="home" icon={<HomeFilled />} />
-      <Menu.Item
-        style={{ float: 'right' }}
-        key="profile"
+      <SubMenu
+        style={{ float: 'right', marginLeft: 10 }}
         icon={<Avatar src={pictureUrl} />}
-      ></Menu.Item>
-      <Menu.Item
-        style={{ float: 'right' }}
-        key="logout"
-        icon={
-          <Button>
-            Logout
-            <LockOutlined />
-          </Button>
-        }
-      ></Menu.Item>
+      >
+        <Menu.Item key="profile" icon={<UserOutlined />}>
+          Profile
+        </Menu.Item>
+        <Menu.Item key="logout" icon={<LockOutlined />}>
+          Logout
+        </Menu.Item>
+      </SubMenu>
     </Menu>
   );
 }
