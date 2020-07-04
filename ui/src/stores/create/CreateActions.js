@@ -9,21 +9,43 @@ export function addComponent(value) {
   };
 }
 
+export const GET_PAGES = 'CreateActions.GET_PAGES';
+export const GET_PAGES_FINISHED = 'CreateActions.GET_PAGES_FINISHED';
+
+export function getCreatedPages() {
+  return async (dispatch) => {
+    await ActionUtility.createThunkEffect(
+      dispatch,
+      GET_PAGES,
+      CreateEffect.getCreatedPages
+    );
+  };
+}
+
 export const ADD_PAGE = 'CreateActions.ADD_PAGE';
+export const ADD_PAGE_FINISHED = 'CreateActions.ADD_PAGE_FINISHED';
 
 export function addPage(page) {
   return async (dispatch) => {
-    dispatch(ActionUtility.createAction(ADD_PAGE, page));
+    await ActionUtility.createThunkEffect(
+      dispatch,
+      ADD_PAGE,
+      CreateEffect.addPage,
+      page
+    );
   };
 }
 
 export const REMOVE_PAGE = 'CreateActions.REMOVE_PAGE';
+export const REMOVE_PAGE_FINISHED = 'CreateActions.REMOVE_PAGE_FINISHED';
 
-/**
- * @param {number} pageKey
- */
-export function removePage(pageKey) {
+export function removePage(...routes) {
   return async (dispatch) => {
-    dispatch(ActionUtility.createAction(REMOVE_PAGE, pageKey));
+    await ActionUtility.createThunkEffect(
+      dispatch,
+      REMOVE_PAGE,
+      CreateEffect.removePage,
+      routes
+    );
   };
 }

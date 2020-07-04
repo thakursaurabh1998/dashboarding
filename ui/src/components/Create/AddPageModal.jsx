@@ -5,7 +5,6 @@ import { Input, Modal, Form } from 'antd';
 import * as CreateActions from '../../stores/create/CreateActions';
 
 export default function AddPageModal({
-  key,
   route,
   title,
   isVisible,
@@ -16,14 +15,13 @@ export default function AddPageModal({
   const dispatch = useDispatch();
 
   const onCreate = (data) => {
-    const { route, title, key } = data;
+    const { route, title } = data;
     const newPage = {
-      key,
       route,
       title,
       content: 'Content of new Tab' + data.key,
     };
-    setActiveKey(key);
+    setActiveKey(route);
     dispatch(CreateActions.addPage(newPage));
     setModalVisible(false);
     return true;
@@ -52,7 +50,7 @@ export default function AddPageModal({
         form={form}
         layout="vertical"
         name="add_page_modal"
-        initialValues={{ route, title, key }}
+        initialValues={{ route, title }}
       >
         <Form.Item
           name="title"
@@ -78,18 +76,6 @@ export default function AddPageModal({
         >
           <Input />
         </Form.Item>
-        <Form.Item
-          name="key"
-          label="Key"
-          rules={[
-            {
-              required: true,
-              message: 'Please input the key of page!',
-            },
-          ]}
-        >
-          <Input placeholder="Can be the same as title but without spaces" />
-        </Form.Item>
       </Form>
     </Modal>
   );
@@ -98,7 +84,6 @@ export default function AddPageModal({
 AddPageModal.propTypes = {
   route: PropTypes.string,
   title: PropTypes.string,
-  key: PropTypes.string,
   isVisible: PropTypes.bool.isRequired,
   setActiveKey: PropTypes.func.isRequired,
   setModalVisible: PropTypes.func.isRequired,

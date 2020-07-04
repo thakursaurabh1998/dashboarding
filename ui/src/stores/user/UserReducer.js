@@ -7,7 +7,7 @@ const userReducer = baseReducer(initialState, {
   [UserActions.FETCH_USER_FINISHED](state, action) {
     return {
       ...state,
-      ...action.payload?.data,
+      ...action.payload?.data?.data,
     };
   },
   [UserActions.CHECK_USER_AUTH_FINISHED](state, action) {

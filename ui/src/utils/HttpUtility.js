@@ -49,11 +49,16 @@ export async function put(endpoint, data) {
   );
 }
 
-export async function del(endpoint) {
-  return _request({
-    url: endpoint,
-    method: RequestMethod.Delete,
-  });
+export async function del(endpoint, data) {
+  const config = data ? { data } : undefined;
+
+  return _request(
+    {
+      url: endpoint,
+      method: RequestMethod.Delete,
+    },
+    config
+  );
 }
 
 export async function _request(restRequest, config) {

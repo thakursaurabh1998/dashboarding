@@ -8,7 +8,9 @@ class BaseEnv {
     this._baseApi = baseApi;
     this.api = {
       sample: `${this._baseApi}/${this._baseRoute}/sample`,
-      getUser: `${this._baseApi}/${this._baseRoute}/user`
+      getUser: `${this._baseApi}/${this._baseRoute}/user`,
+      createPage: `${this._baseApi}/${this._baseRoute}/create/page`,
+      getAllCreatedPages: `${this._baseApi}/${this._baseRoute}/create/pages`,
     };
   }
 }
