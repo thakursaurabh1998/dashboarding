@@ -7,12 +7,14 @@ import (
 // Handler contains all the functions required for the routes
 type Handler struct {
 	userStore store.UserStore
+	pageStore store.PageStore
 }
 
 // NewHandler returns a Handler struct
-func NewHandler(us store.UserStore) (h *Handler) {
+func NewHandler(us store.UserStore, ps store.PageStore) (h *Handler) {
 	h = &Handler{
 		us,
+		ps,
 	}
 	return
 }

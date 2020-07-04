@@ -17,7 +17,7 @@ type (
 	// UserStore is an interface for user functions
 	UserStore interface {
 		GetUser(email string) (*models.User, error)
-		InsertUser(name string, email string, picture string, at string) (*mongo.InsertOneResult, error)
+		InsertUser(name, email, picture, at string) (*mongo.InsertOneResult, error)
 		UpsertUser(userData map[string]string) (*mongo.UpdateResult, error)
 	}
 )
@@ -37,7 +37,7 @@ func (us *userStore) GetUser(email string) (*models.User, error) {
 	return &userData, nil
 }
 
-func (us *userStore) InsertUser(name string, email string, picture string, at string) (*mongo.InsertOneResult, error) {
+func (us *userStore) InsertUser(name, email, picture, at string) (*mongo.InsertOneResult, error) {
 	user := models.User{
 		Name:        name,
 		Email:       email,

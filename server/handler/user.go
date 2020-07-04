@@ -12,9 +12,6 @@ func (h *Handler) GetUser(c echo.Context) error {
 	userDataMap := utils.GetUserDataFromContext(&c)
 	email := (*userDataMap)["email"].(string)
 
-	if email == "" {
-		return c.String(http.StatusBadRequest, "email missing in qpm")
-	}
 	userData, err := h.userStore.GetUser(email)
 	if err != nil {
 		utils.Logger.Error(err)

@@ -7,9 +7,11 @@ import (
 	"github.com/thakursaurabh1998/dashboarding/server/store"
 )
 
+// Init initializes the router with all the routes
 func Init(e *echo.Echo, c *connections.Connections) {
 	userStore := store.NewUserStore(c.Db)
-	h := handler.NewHandler(userStore)
+	pageStore := store.NewPageStore(c.Db)
+	h := handler.NewHandler(userStore, pageStore)
 	apiInit(e.Group("/api"), h)
 	authInit(e.Group("/auth"), h)
 }
