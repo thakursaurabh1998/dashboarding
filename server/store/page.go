@@ -18,6 +18,7 @@ type (
 		GetPage(email string, ids []string) ([]*models.Page, error)
 		GetPages(email string) ([]*models.Page, error)
 		AddPage(email, route, title string) (*mongo.InsertOneResult, error)
+		RemovePage(email string, routes []string) (*mongo.DeleteResult, error)
 	}
 )
 
@@ -87,4 +88,13 @@ func (ps *pageStore) GetPages(email string) ([]*models.Page, error) {
 		return nil, err
 	}
 	return pages, nil
+}
+
+func (ps *pageStore) RemovePage(email string, routes []string) (*mongo.DeleteResult, error) {
+	filter := bson.D{{"email", email}, {"route", bson.D{{"$in", routes}}}}
+	data, err := ps.db.Collection("pages").DeleteMany(context.TODO(), filter)
+	if err != nil {
+		return nil, err
+	}
+	return data, nil
 }

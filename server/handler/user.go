@@ -17,7 +17,7 @@ func (h *Handler) GetUser(c echo.Context) error {
 		utils.Logger.Error(err)
 		return c.JSON(http.StatusNotFound, createRes(false, nil, nil, http.StatusText(http.StatusNotFound)))
 	}
-	return c.JSON(http.StatusOK, userData)
+	return c.JSON(http.StatusOK, createRes(true, userData, nil, ""))
 }
 
 // InsertUser saves the user to the database

@@ -34,4 +34,5 @@ func apiInit(api *echo.Group, h *handler.Handler) {
 	api.GET("/create/pages", h.GetPages)
 	api.GET("/create/page", h.GetPage)
 	api.PUT("/create/page", h.AddPage)
+	api.DELETE("/create/page", h.RemovePage)
 }
