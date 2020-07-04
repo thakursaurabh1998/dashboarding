@@ -2,6 +2,7 @@ export const AntDComponents = [
   {
     title: 'Text',
     value: 'Text',
+    disabled: true,
     children: [
       {
         title: 'Input',

@@ -1,25 +1,22 @@
-import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { TreeSelect, Button, Divider, Row, Col } from 'antd';
-import { AntDComponents } from '../../constants/AntDComponents';
-import * as CreateActions from '../../stores/create/CreateActions';
+import React from 'react';
+import { useSelector } from 'react-redux';
+import { Divider, Collapse } from 'antd';
+import CreatePages from './CreatePages';
 import DisplayComponent from './DisplayComponent';
+import CreateComponents from './CreateComponents';
+import { useState } from 'react';
+
+const { Panel } = Collapse;
 
 export default function Create() {
-  const dispatch = useDispatch();
-  const [selectedValue, setSelectedValue] = useState(null);
+  const [activeKey, setActiveKey] = useState('pages');
 
-  const { createComponents } = useSelector((state) => ({
-    createComponents: state.create,
+  const { createdComponents } = useSelector((state) => ({
+    createdComponents: state.create.components,
   }));
 
-  const onChange = (value) => {
-    setSelectedValue(value);
-  };
-
-  const addComponent = () => {
-    dispatch(CreateActions.addComponent(selectedValue));
-    setSelectedValue(null);
+  const onPanelChange = (key) => {
+    key && setActiveKey(key);
   };
 
   return (
@@ -30,24 +27,22 @@ export default function Create() {
       >
         <h1>Create Dashboard</h1>
       </Divider>
-      <Row gutter={16}>
-        <Col className="gutter-row" span={6}>
-          <TreeSelect
-            style={{ width: '100%' }}
-            value={selectedValue}
-            dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
-            treeData={AntDComponents}
-            placeholder="Please select"
-            treeDefaultExpandAll
-            onChange={onChange}
-          />
-        </Col>
-        <Col className="gutter-row" span={6}>
-          <Button onClick={addComponent}>Add Component</Button>
-        </Col>
-      </Row>
-      {createComponents.map((cc) => (
-        <DisplayComponent component={cc} meta={null} />
+      <Collapse
+        ghost
+        accordion
+        destroyInactivePanel
+        activeKey={activeKey}
+        onChange={onPanelChange}
+      >
+        <Panel header="Pages" key="pages">
+          <CreatePages />
+        </Panel>
+        <Panel header="Components" key="components">
+          <CreateComponents />
+        </Panel>
+      </Collapse>
+      {createdComponents.map((cc, index) => (
+        <DisplayComponent component={cc} meta={null} key={index} />
       ))}
     </>
   );
