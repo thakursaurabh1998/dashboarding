@@ -6,39 +6,33 @@ import AddPageModal from './AddPageModal';
 
 const { TabPane } = Tabs;
 
-export default function CreateComponents() {
+export default function CreatePages() {
   const dispatch = useDispatch();
 
+  const [activeKey, setActiveKey] = useState(null);
   const [isModalVisible, setModalVisible] = useState(false);
   const { pages } = useSelector((state) => ({
     pages: state.create.pages,
   }));
 
-  const [activeKey, setActiveKey] = useState(null);
-
-  const add = () => {
-    setModalVisible(true);
-  };
-
   const remove = (targetKey) => {
-    let newActiveKey = 0;
-    if (pages.length - 1 && activeKey === targetKey) {
-      const lastIndex =
-        pages.findIndex((page) => page.key === parseInt(targetKey)) - 1;
-      if (lastIndex >= 0) {
-        newActiveKey = pages[lastIndex].key;
+    let newActiveKey = null;
+    const lastIndex = pages.findIndex((page) => page.key === targetKey);
+    if (pages && pages.length > 0) {
+      if (lastIndex > 0) {
+        newActiveKey = pages[lastIndex - 1].key;
       } else {
-        newActiveKey = pages[0].key;
+        newActiveKey = pages[1] && pages[1].key;
       }
     }
-    dispatch(CreateActions.removePage(targetKey));
     setActiveKey(newActiveKey);
+    dispatch(CreateActions.removePage(targetKey));
   };
 
   const onEdit = (targetKey, action) => {
     switch (action) {
       case 'add':
-        add();
+        setModalVisible(true);
         break;
       case 'remove':
         remove(targetKey);
@@ -61,9 +55,9 @@ export default function CreateComponents() {
               title={page.title}
               extra={<Button type="primary">Save</Button>}
             >
-              {page.key}
-              {page.route}
-              {page.title}
+              KEY: {page.key}
+              ROUTE: {page.route}
+              TITLE: {page.title}
             </Card>
           </TabPane>
         ))}

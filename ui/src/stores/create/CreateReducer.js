@@ -17,7 +17,7 @@ const createReducer = baseReducer(initialState, {
     };
   },
   [CreateActions.REMOVE_PAGE](state, action) {
-    const targetKey = parseInt(action.payload);
+    const targetKey = action.payload;
     return {
       ...state,
       pages: state.pages.filter((page) => page.key !== targetKey),
