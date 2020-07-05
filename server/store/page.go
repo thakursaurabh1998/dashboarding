@@ -9,6 +9,8 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
+var pageCollection *mongo.Collection
+
 type (
 	pageStore struct {
 		db *mongo.Database
@@ -18,12 +20,14 @@ type (
 		GetPage(email string, ids []string) ([]*models.Page, error)
 		GetPages(email string) ([]*models.Page, error)
 		AddPage(email, route, title string) (*mongo.InsertOneResult, error)
+		EditPage(email, route, newRoute, newTitle string) (*mongo.UpdateResult, error)
 		RemovePage(email string, routes []string) (*mongo.DeleteResult, error)
 	}
 )
 
 // NewPageStore creates an instance for the user store
 func NewPageStore(db *mongo.Database) PageStore {
+	pageCollection = db.Collection("pages")
 	return &pageStore{db}
 }
 
@@ -36,7 +40,7 @@ func (ps *pageStore) AddPage(email, route, title string) (*mongo.InsertOneResult
 		Components: []models.Component{},
 	}
 
-	return ps.db.Collection("pages").InsertOne(context.TODO(), page)
+	return pageCollection.InsertOne(context.TODO(), page)
 }
 
 func (ps *pageStore) GetPage(email string, ids []string) ([]*models.Page, error) {
@@ -49,7 +53,7 @@ func (ps *pageStore) GetPage(email string, ids []string) ([]*models.Page, error)
 		pids = append(pids, pid)
 	}
 	filter := bson.D{{"email", email}, {"_id", bson.D{{"$in", pids}}}}
-	cur, err := ps.db.Collection("pages").Find(context.TODO(), filter)
+	cur, err := pageCollection.Find(context.TODO(), filter)
 	if err != nil {
 		return nil, err
 	}
@@ -72,7 +76,7 @@ func (ps *pageStore) GetPage(email string, ids []string) ([]*models.Page, error)
 func (ps *pageStore) GetPages(email string) ([]*models.Page, error) {
 	var pages []*models.Page
 	filter := bson.D{{"email", email}}
-	cur, err := ps.db.Collection("pages").Find(context.TODO(), filter)
+	cur, err := pageCollection.Find(context.TODO(), filter)
 	if err != nil {
 		return nil, err
 	}
@@ -90,9 +94,20 @@ func (ps *pageStore) GetPages(email string) ([]*models.Page, error) {
 	return pages, nil
 }
 
+func (ps *pageStore) EditPage(email, route, newRoute, newTitle string) (*mongo.UpdateResult, error) {
+	filter := bson.D{{"email", email}, {"route", route}}
+	update := bson.D{
+		{"$set", bson.D{
+			{"route", newRoute},
+			{"title", newTitle},
+		}},
+	}
+	return pageCollection.UpdateOne(context.TODO(), filter, update)
+}
+
 func (ps *pageStore) RemovePage(email string, routes []string) (*mongo.DeleteResult, error) {
 	filter := bson.D{{"email", email}, {"route", bson.D{{"$in", routes}}}}
-	data, err := ps.db.Collection("pages").DeleteMany(context.TODO(), filter)
+	data, err := pageCollection.DeleteMany(context.TODO(), filter)
 	if err != nil {
 		return nil, err
 	}

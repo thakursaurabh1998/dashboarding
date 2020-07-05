@@ -49,7 +49,7 @@ func (h *Handler) AddPage(c echo.Context) error {
 	page, err := h.pageStore.AddPage(email, route, title)
 	if err != nil {
 		utils.Logger.Error(err)
-		return c.JSON(http.StatusInternalServerError, createRes(false, nil, nil, http.StatusText(http.StatusNotFound)))
+		return c.JSON(http.StatusInternalServerError, createRes(false, nil, nil, http.StatusText(http.StatusInternalServerError)))
 	}
 	return c.JSON(http.StatusOK, createRes(true, page, nil, ""))
 }
@@ -71,7 +71,26 @@ func (h *Handler) RemovePage(c echo.Context) error {
 	data, err := h.pageStore.RemovePage(email, routes)
 	if err != nil {
 		utils.Logger.Error(err)
-		return c.JSON(http.StatusInternalServerError, createRes(false, nil, nil, http.StatusText(http.StatusNotFound)))
+		return c.JSON(http.StatusInternalServerError, createRes(false, nil, nil, http.StatusText(http.StatusInternalServerError)))
 	}
 	return c.JSON(http.StatusOK, createRes(true, data, nil, ""))
+}
+
+// EditPage edits a page to the dashboard
+func (h *Handler) EditPage(c echo.Context) error {
+	m := echo.Map{}
+	if err := c.Bind(&m); err != nil {
+		return err
+	}
+	nr, nt, route := m["newRoute"].(string), m["newTitle"].(string), m["route"].(string)
+
+	userDataMap := utils.GetUserDataFromContext(&c)
+	email := (*userDataMap)["email"].(string)
+
+	page, err := h.pageStore.EditPage(email, route, nr, nt)
+	if err != nil {
+		utils.Logger.Error(err)
+		return c.JSON(http.StatusInternalServerError, createRes(false, nil, nil, http.StatusText(http.StatusInternalServerError)))
+	}
+	return c.JSON(http.StatusOK, createRes(true, page, nil, ""))
 }

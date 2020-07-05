@@ -10,6 +10,8 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
+var userCollection *mongo.Collection
+
 type (
 	userStore struct {
 		db *mongo.Database
@@ -24,13 +26,14 @@ type (
 
 // NewUserStore creates an instance for the user store
 func NewUserStore(db *mongo.Database) UserStore {
+	userCollection = db.Collection("users")
 	return &userStore{db}
 }
 
 func (us *userStore) GetUser(email string) (*models.User, error) {
 	var userData models.User
 	filter := bson.D{{"email", email}}
-	err := us.db.Collection("users").FindOne(context.TODO(), filter).Decode(&userData)
+	err := userCollection.FindOne(context.TODO(), filter).Decode(&userData)
 	if err != nil {
 		return nil, err
 	}
@@ -45,7 +48,7 @@ func (us *userStore) InsertUser(name, email, picture, at string) (*mongo.InsertO
 		AccessToken: at,
 		PictureURL:  picture,
 	}
-	return us.db.Collection("users").InsertOne(context.TODO(), user)
+	return userCollection.InsertOne(context.TODO(), user)
 }
 
 func (us *userStore) UpsertUser(userData map[string]string) (*mongo.UpdateResult, error) {
@@ -64,5 +67,5 @@ func (us *userStore) UpsertUser(userData map[string]string) (*mongo.UpdateResult
 	}
 	upsert := true
 	opt := &options.UpdateOptions{Upsert: &upsert}
-	return us.db.Collection("users").UpdateOne(context.TODO(), filter, update, opt)
+	return userCollection.UpdateOne(context.TODO(), filter, update, opt)
 }
