@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Row, Card, Tabs, Button } from 'antd';
+import { Row, Card, Tabs, Button, Col } from 'antd';
 import * as CreateActions from '../../stores/create/CreateActions';
 import AddPageModal from './AddPageModal';
 import { useEffect } from 'react';
@@ -19,6 +19,12 @@ export default function CreatePages() {
   useEffect(() => {
     dispatch(CreateActions.getCreatedPages());
   }, [dispatch]);
+
+  useEffect(() => {
+    if (!activeKey && pages.length > 0) {
+      setActiveKey(pages[0].route);
+    }
+  }, [pages, activeKey]);
 
   const remove = (targetKey) => {
     let newActiveKey = null;
@@ -56,13 +62,17 @@ export default function CreatePages() {
       >
         {pages.map((page) => (
           <TabPane tab={page.title} key={page.route} closable={page.closable}>
-            <Card
-              title={page.title}
-              extra={<Button type="primary">Edit</Button>}
-            >
-              ROUTE: {page.route}
-              TITLE: {page.title}
-            </Card>
+            <Row>
+              <Col span={12}>
+                <Card
+                  title={page.title}
+                  extra={<Button type="primary">Edit</Button>}
+                >
+                  ROUTE: {page.route}
+                  TITLE: {page.title}
+                </Card>
+              </Col>
+            </Row>
           </TabPane>
         ))}
       </Tabs>
