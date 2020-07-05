@@ -1,12 +1,4 @@
-export async function createThunkEffect(dispatch, actionType, effect, ...args) {
-  dispatch(createAction(actionType));
-
-  const response = await effect(...args);
-
-  const isErrored = Boolean(response.error);
-
-  dispatch(createAction(`${actionType}_FINISHED`, response, isErrored, args));
-}
+import openNotification from './NotificationUtility';
 
 export function createAction(
   type,
@@ -15,4 +7,17 @@ export function createAction(
   meta = null
 ) {
   return { type, payload, error, meta };
+}
+
+export async function createThunkEffect(dispatch, actionType, effect, ...args) {
+  dispatch(createAction(actionType));
+
+  const response = await effect(...args);
+
+  const isErrored = Boolean(response.error);
+  const errorMessage = "There's an issue";
+  isErrored &&
+    openNotification('BANNER', 'error', response?.message || errorMessage);
+
+  dispatch(createAction(`${actionType}_FINISHED`, response, isErrored, args));
 }
