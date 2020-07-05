@@ -36,6 +36,20 @@ export function addPage(page) {
   };
 }
 
+export const EDIT_PAGE = 'CreateActions.EDIT_PAGE';
+export const EDIT_PAGE_FINISHED = 'CreateActions.EDIT_PAGE_FINISHED';
+
+export function editPage(page) {
+  return async (dispatch) => {
+    await ActionUtility.createThunkEffect(
+      dispatch,
+      EDIT_PAGE,
+      CreateEffect.editPage,
+      page
+    );
+  };
+}
+
 export const REMOVE_PAGE = 'CreateActions.REMOVE_PAGE';
 export const REMOVE_PAGE_FINISHED = 'CreateActions.REMOVE_PAGE_FINISHED';
 
