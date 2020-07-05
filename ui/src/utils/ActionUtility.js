@@ -3,7 +3,9 @@ export async function createThunkEffect(dispatch, actionType, effect, ...args) {
 
   const response = await effect(...args);
 
-  dispatch(createAction(`${actionType}_FINISHED`, response, null, args));
+  const isErrored = Boolean(response.error);
+
+  dispatch(createAction(`${actionType}_FINISHED`, response, isErrored, args));
 }
 
 export function createAction(

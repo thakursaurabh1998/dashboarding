@@ -141,6 +141,7 @@ function _fillInErrorWithDefaults(error, request) {
   const { url } = request;
   const { status, message } = error;
   return {
+    error: true,
     status,
     message,
     url,
