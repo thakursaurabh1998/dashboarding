@@ -81,75 +81,73 @@ export default function CreatePages() {
   };
 
   return (
-    <Row gutter={16}>
-      <Col span={12}>
-        <Tabs
-          type="editable-card"
-          onChange={setActiveKey}
-          activeKey={activeKey}
-          onEdit={onEdit}
-        >
-          {pages.map((page) => (
-            <TabPane tab={page.title} key={page.route} closable={page.closable}>
-              <div>
-                <Row gutter={16} style={{ backgroundColor: '#f5f5f5' }}>
-                  <Col span={23}>
-                    <Card
-                      title={
-                        <Typography.Title level={3}>
-                          {page.title}
-                        </Typography.Title>
-                      }
-                      style={{ margin: 10, minHeight: 350, width: '100%' }}
-                      extra={
-                        !isEditable ? (
-                          <Button onClick={changeEditable}>Edit</Button>
-                        ) : (
-                          <Button type="primary" onClick={savePageData(page)}>
-                            Save
-                          </Button>
-                        )
-                      }
-                    >
-                      <Row style={{ marginBottom: 10 }}>
-                        <Col span={6}>
-                          <Typography.Title level={4}>ROUTE:</Typography.Title>
-                        </Col>
-                        <Col span={12}>
-                          <Input
-                            size="large"
-                            disabled={!isEditable}
-                            defaultValue={page.route}
-                            onChange={handleUpdate('route')}
-                          />
-                        </Col>
-                      </Row>
-                      <Row>
-                        <Col span={6}>
-                          <Typography.Title level={4}>TITLE:</Typography.Title>
-                        </Col>
-                        <Col span={12}>
-                          <Input
-                            size="large"
-                            disabled={!isEditable}
-                            defaultValue={page.title}
-                            onChange={handleUpdate('title')}
-                          />
-                        </Col>
-                      </Row>
-                    </Card>
-                  </Col>
-                </Row>
-              </div>
-            </TabPane>
-          ))}
-        </Tabs>
-        <AddPageModal
-          setModalVisible={setModalVisible}
-          isVisible={isModalVisible}
-          setActiveKey={setActiveKey}
-        />
-      </Col>
-    </Row>
+    <>
+      <Tabs
+        type="editable-card"
+        onChange={setActiveKey}
+        activeKey={activeKey}
+        onEdit={onEdit}
+      >
+        {pages.map((page) => (
+          <TabPane tab={page.title} key={page.route} closable={page.closable}>
+            <div>
+              <Row gutter={16} style={{ backgroundColor: '#f5f5f5' }}>
+                <Col span={23}>
+                  <Card
+                    title={
+                      <Typography.Title level={3}>
+                        {page.title}
+                      </Typography.Title>
+                    }
+                    style={{ margin: 10, minHeight: 350, width: '100%' }}
+                    extra={
+                      !isEditable ? (
+                        <Button onClick={changeEditable}>Edit</Button>
+                      ) : (
+                        <Button type="primary" onClick={savePageData(page)}>
+                          Save
+                        </Button>
+                      )
+                    }
+                  >
+                    <Row style={{ marginBottom: 10 }}>
+                      <Col span={6}>
+                        <Typography.Title level={4}>ROUTE:</Typography.Title>
+                      </Col>
+                      <Col span={12}>
+                        <Input
+                          size="large"
+                          disabled={!isEditable}
+                          defaultValue={page.route}
+                          onChange={handleUpdate('route')}
+                        />
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col span={6}>
+                        <Typography.Title level={4}>TITLE:</Typography.Title>
+                      </Col>
+                      <Col span={12}>
+                        <Input
+                          size="large"
+                          disabled={!isEditable}
+                          defaultValue={page.title}
+                          onChange={handleUpdate('title')}
+                        />
+                      </Col>
+                    </Row>
+                  </Card>
+                </Col>
+              </Row>
+            </div>
+          </TabPane>
+        ))}
+      </Tabs>
+      <AddPageModal
+        setModalVisible={setModalVisible}
+        isVisible={isModalVisible}
+        setActiveKey={setActiveKey}
+      />
+    </>
   );
 }

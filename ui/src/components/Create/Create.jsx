@@ -1,6 +1,6 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { Divider, Collapse } from 'antd';
+import { Divider, Collapse, Row, Col } from 'antd';
 import CreatePages from './CreatePages';
 import DisplayComponent from './DisplayComponent';
 import CreateComponents from './CreateComponents';
@@ -35,15 +35,34 @@ export default function Create() {
         onChange={onPanelChange}
       >
         <Panel header="Pages" key="pages">
-          <CreatePages />
+          <Row gutter={16}>
+            <Col md={16} sm={24}>
+              <CreatePages />
+            </Col>
+          </Row>
         </Panel>
         <Panel header="Components" key="components">
-          <CreateComponents />
+          <Row>
+            <Col span={24}>
+              <CreateComponents />
+            </Col>
+          </Row>
         </Panel>
       </Collapse>
-      {createdComponents.map((cc, index) => (
-        <DisplayComponent component={cc} meta={null} key={index} />
-      ))}
+      {activeKey === 'components' && (
+        <>
+          <Divider orientation="left">
+            <h3>Preview</h3>
+          </Divider>
+          <Row gutter={16}>
+            <Col md={12} sm={24} xs={24}>
+              {createdComponents.map((cc, index) => (
+                <DisplayComponent component={cc} meta={null} key={index} />
+              ))}
+            </Col>
+          </Row>
+        </>
+      )}
     </>
   );
 }
