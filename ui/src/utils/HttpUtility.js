@@ -140,6 +140,13 @@ export async function _request(restRequest, config) {
 function _fillInErrorWithDefaults(error, request) {
   const { url } = request;
   const { status, message } = error;
+
+  if (status === 401) {
+    window.localStorage.clear();
+    window.location.replace('/');
+    return;
+  }
+
   return {
     error: true,
     status,
