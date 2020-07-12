@@ -30,7 +30,7 @@ func apiInit(api *echo.Group, h *handler.Handler) {
 	api.PUT("/user", h.UpsertUser)
 	api.POST("/user", h.InsertUser)
 
-	// create routes
+	// create page routes
 	api.GET("/create/pages", h.GetPages)
 	api.GET("/create/page", h.GetPage)
 	api.PUT("/create/page", h.AddPage)

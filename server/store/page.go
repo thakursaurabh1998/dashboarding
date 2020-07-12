@@ -15,7 +15,7 @@ type (
 	pageStore struct {
 		db *mongo.Database
 	}
-	// PageStore is an interfacce for sotre functions
+	// PageStore is an interfacce for store functions
 	PageStore interface {
 		GetPage(email string, ids []string) ([]*models.Page, error)
 		GetPages(email string) ([]*models.Page, error)
@@ -33,11 +33,10 @@ func NewPageStore(db *mongo.Database) PageStore {
 
 func (ps *pageStore) AddPage(email, route, title string) (*mongo.InsertOneResult, error) {
 	page := models.Page{
-		Email:      email,
-		Route:      route,
-		Title:      title,
-		ID:         primitive.NewObjectID(),
-		Components: []models.Component{},
+		Email: email,
+		Route: route,
+		Title: title,
+		ID:    primitive.NewObjectID(),
 	}
 
 	return pageCollection.InsertOne(context.TODO(), page)
