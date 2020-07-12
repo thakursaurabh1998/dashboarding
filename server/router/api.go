@@ -31,9 +31,12 @@ func apiInit(api *echo.Group, h *handler.Handler) {
 	api.POST("/user", h.InsertUser)
 
 	// create page routes
-	api.GET("/create/pages", h.GetPages)
+	api.GET("/create/pages", h.GetAllPages)
 	api.GET("/create/page", h.GetPage)
 	api.PUT("/create/page", h.AddPage)
 	api.POST("/create/page", h.EditPage)
 	api.DELETE("/create/page", h.RemovePage)
+
+	// create component routes
+	api.GET("/create/components", h.GetAllComponents)
 }

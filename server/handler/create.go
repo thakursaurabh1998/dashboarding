@@ -8,12 +8,12 @@ import (
 	"github.com/thakursaurabh1998/dashboarding/server/utils"
 )
 
-// GetPages return all the pages of the context user
-func (h *Handler) GetPages(c echo.Context) error {
+// GetAllPages return all the pages of the context user
+func (h *Handler) GetAllPages(c echo.Context) error {
 	userDataMap := utils.GetUserDataFromContext(&c)
 	email := (*userDataMap)["email"].(string)
 
-	pages, err := h.pageStore.GetPages(email)
+	pages, err := h.pageStore.GetAllPages(email)
 	if err != nil {
 		utils.Logger.Error(err)
 		return c.JSON(http.StatusNotFound, createRes(false, nil, nil, http.StatusText(http.StatusNotFound)))
@@ -88,6 +88,33 @@ func (h *Handler) EditPage(c echo.Context) error {
 	email := (*userDataMap)["email"].(string)
 
 	page, err := h.pageStore.EditPage(email, route, nr, nt)
+	if err != nil {
+		utils.Logger.Error(err)
+		return c.JSON(http.StatusInternalServerError, createRes(false, nil, nil, http.StatusText(http.StatusInternalServerError)))
+	}
+	return c.JSON(http.StatusOK, createRes(true, page, nil, ""))
+}
+
+// GetAllComponents fetch all the components of a page
+func (h *Handler) GetAllComponents(c echo.Context) error {
+	pageID := c.QueryParam("pageID")
+	components, err := h.componentStore.GetAllComponents(pageID)
+	if err != nil {
+		utils.Logger.Error(err)
+		return c.JSON(http.StatusNotFound, createRes(false, nil, nil, http.StatusText(http.StatusNotFound)))
+	}
+	return c.JSON(http.StatusOK, createRes(true, components, nil, ""))
+}
+
+// AddComponent adds a component to a page
+func (h *Handler) AddComponent(c echo.Context) error {
+	m := echo.Map{}
+	if err := c.Bind(&m); err != nil {
+		return err
+	}
+	pageID, key, label, meta := m["pageID"].(string), m["key"].(string), m["label"].(string), m["meta"].(map[string]interface{})
+
+	page, err := h.componentStore.AddComponent(pageID, key, label, meta)
 	if err != nil {
 		utils.Logger.Error(err)
 		return c.JSON(http.StatusInternalServerError, createRes(false, nil, nil, http.StatusText(http.StatusInternalServerError)))

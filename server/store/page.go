@@ -18,7 +18,7 @@ type (
 	// PageStore is an interfacce for store functions
 	PageStore interface {
 		GetPage(email string, ids []string) ([]*models.Page, error)
-		GetPages(email string) ([]*models.Page, error)
+		GetAllPages(email string) ([]*models.Page, error)
 		AddPage(email, route, title string) (*mongo.InsertOneResult, error)
 		EditPage(email, route, newRoute, newTitle string) (*mongo.UpdateResult, error)
 		RemovePage(email string, routes []string) (*mongo.DeleteResult, error)
@@ -72,7 +72,7 @@ func (ps *pageStore) GetPage(email string, ids []string) ([]*models.Page, error)
 	return pages, nil
 }
 
-func (ps *pageStore) GetPages(email string) ([]*models.Page, error) {
+func (ps *pageStore) GetAllPages(email string) ([]*models.Page, error) {
 	var pages []*models.Page
 	filter := bson.D{{"email", email}}
 	cur, err := pageCollection.Find(context.TODO(), filter)
