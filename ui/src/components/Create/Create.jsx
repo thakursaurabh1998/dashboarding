@@ -65,9 +65,7 @@ export default function Create() {
           </Divider>
           <Row gutter={16}>
             <Col md={12} sm={24} xs={24}>
-              {components && components.map((cc, index) => (
-                <DisplayComponent component={cc} meta={null} key={index} />
-              ))}
+              <DisplayComponent components={components} />
             </Col>
           </Row>
         </>

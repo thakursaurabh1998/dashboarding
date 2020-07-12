@@ -1,5 +1,5 @@
 import React from 'react';
-import { Input } from 'antd';
+import { Input, Form } from 'antd';
 import PropTypes from 'prop-types';
 import TextArea from 'antd/lib/input/TextArea';
 
@@ -28,11 +28,34 @@ const componentNameToFunctionMap = {
   TextArea: TextAreaComponent,
 };
 
-export default function DisplayComponent({ meta, component }) {
-  return componentNameToFunctionMap[component](meta);
+export default function DisplayComponent({ components }) {
+  const [form] = Form.useForm();
+
+  return (
+    <Form form={form} layout="vertical" name="demo_form">
+      {components.map((component) => (
+        <Form.Item
+          key={component.label}
+          name={component.label}
+          label={component.label}
+          rules={[
+            {
+              required: component.required,
+              message: 'Field empty!',
+            },
+          ]}
+        >
+          {componentNameToFunctionMap[component.name](component.meta)}
+        </Form.Item>
+      ))}
+    </Form>
+  );
 }
 
 DisplayComponent.propTypes = {
-  meta: PropTypes.object,
-  component: PropTypes.string.isRequired,
+  components: PropTypes.array.isRequired,
+};
+
+DisplayComponent.defaultProps = {
+  components: [],
 };
