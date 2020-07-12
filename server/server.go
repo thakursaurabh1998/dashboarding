@@ -30,13 +30,18 @@ func customHTTPErrorHandler(err error, c echo.Context) {
 	}
 	utils.Logger.Error(err)
 	email := os.Getenv("MAINTAINER_EMAIL")
-	if code == http.StatusInternalServerError {
-		c.JSON(code, echo.Map{"message": fmt.Sprintf("Our servers must have been tired by now, please email this to me at %s and I'll give them a boost", email)})
-	} else if code == http.StatusUnauthorized {
-		c.JSON(code, echo.Map{"message": fmt.Sprintf("Invalid Authorization Bearer Token")})
-	} else {
-		c.JSON(code, echo.Map{"message": fmt.Sprintf("Oopsie! Somethings wrong, email me at %s to find out", email)})
+	var msg echo.Map
+	switch code {
+	case http.StatusInternalServerError:
+		msg = echo.Map{"message": fmt.Sprintf("Our servers must have been tired by now, please email this to me at %s and I'll give them a boost", email)}
+	case http.StatusUnauthorized:
+		msg = echo.Map{"message": fmt.Sprintf("Invalid Authorization Bearer Token")}
+	case http.StatusNotFound:
+		msg = echo.Map{"message": "Desired route not found"}
+	default:
+		msg = echo.Map{"message": fmt.Sprintf("Oopsie! Somethings wrong, email me at %s to find out", email)}
 	}
+	c.JSON(code, msg)
 }
 
 // Init initializes a server
