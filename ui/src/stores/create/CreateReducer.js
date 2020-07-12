@@ -1,7 +1,7 @@
 import * as CreateActions from './CreateActions';
 const { default: baseReducer } = require('../../utils/BaseReducer');
 
-export const initialState = { components: [], pages: {} };
+export const initialState = { components: [], pages: {}, activePage: null };
 
 const createReducer = baseReducer(initialState, {
   [CreateActions.ADD_COMPONENT](state, action) {
@@ -55,6 +55,12 @@ const createReducer = baseReducer(initialState, {
           title: page.newTitle,
         },
       },
+    };
+  },
+  [CreateActions.UPDATE_ACTIVE_PAGE](state, action) {
+    return {
+      ...state,
+      activePage: action.payload,
     };
   },
 });

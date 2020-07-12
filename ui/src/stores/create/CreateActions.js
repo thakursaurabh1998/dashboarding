@@ -63,3 +63,11 @@ export function removePage(...routes) {
     );
   };
 }
+
+export const UPDATE_ACTIVE_PAGE = 'CreateActions.UPDATE_ACTIVE_PAGE';
+
+export function updateActivePage(key) {
+  return async (dispatch) => {
+    dispatch(ActionUtility.createAction(UPDATE_ACTIVE_PAGE, key));
+  };
+}

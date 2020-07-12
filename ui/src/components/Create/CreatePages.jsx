@@ -10,12 +10,12 @@ const { TabPane } = Tabs;
 export default function CreatePages() {
   const dispatch = useDispatch();
 
-  const [activeKey, setActiveKey] = useState(null);
   const [isEditable, setIsEditable] = useState(false);
   const [isModalVisible, setModalVisible] = useState(false);
   const [updatedRoute, setUpdatedRoute] = useState(null);
   const [updatedTitle, setUpdatedTitle] = useState(null);
-  const { pages } = useSelector((state) => ({
+  const { activeKey, pages } = useSelector((state) => ({
+    activeKey: state.create.activePage,
     pages: Object.values(state.create.pages),
   }));
 
@@ -25,9 +25,9 @@ export default function CreatePages() {
 
   useEffect(() => {
     if (!activeKey && pages.length > 0) {
-      setActiveKey(pages[0].route);
+      dispatch(CreateActions.updateActivePage(pages[0].route));
     }
-  }, [pages, activeKey]);
+  }, [pages, activeKey, dispatch]);
 
   const remove = (targetKey) => {
     let newActiveKey = null;
@@ -39,12 +39,16 @@ export default function CreatePages() {
         newActiveKey = pages[1] && pages[1].key;
       }
     }
-    setActiveKey(newActiveKey);
+    dispatch(CreateActions.updateActivePage(newActiveKey));
     dispatch(CreateActions.removePage(targetKey));
   };
 
   const changeEditable = () => {
     setIsEditable(!isEditable);
+  };
+
+  const setActiveKey = (key) => {
+    dispatch(CreateActions.updateActivePage(key));
   };
 
   const savePageData = (oldData) => (e) => {
@@ -57,7 +61,7 @@ export default function CreatePages() {
     setUpdatedRoute(null);
     setUpdatedTitle(null);
     setIsEditable(false);
-    setActiveKey(update.newRoute);
+    dispatch(update.newRoute);
   };
 
   const handleUpdate = (key) => (e) => {
