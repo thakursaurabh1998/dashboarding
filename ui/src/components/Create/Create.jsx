@@ -1,19 +1,28 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
+import React, { useEffect, useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { Divider, Collapse, Row, Col } from 'antd';
 import CreatePages from './CreatePages';
 import DisplayComponent from './DisplayComponent';
 import CreateComponents from './CreateComponents';
-import { useState } from 'react';
+import * as CreateActions from '../../stores/create/CreateActions';
 
 const { Panel } = Collapse;
 
 export default function Create() {
+  const dispatch = useDispatch();
   const [activeKey, setActiveKey] = useState('pages');
 
-  const { createdComponents } = useSelector((state) => ({
-    createdComponents: state.create.components,
+  const { activePage, pages, components } = useSelector((state) => ({
+    pages: state.create.pages,
+    activePage: state.create.activePage,
+    components: state.create.components,
   }));
+
+  useEffect(() => {
+    if (activePage) {
+      dispatch(CreateActions.getComponents(pages[activePage]?.id));
+    }
+  }, [activePage, pages, dispatch]);
 
   const onPanelChange = (key) => {
     key && setActiveKey(key);
@@ -56,7 +65,7 @@ export default function Create() {
           </Divider>
           <Row gutter={16}>
             <Col md={12} sm={24} xs={24}>
-              {createdComponents.map((cc, index) => (
+              {components && components.map((cc, index) => (
                 <DisplayComponent component={cc} meta={null} key={index} />
               ))}
             </Col>

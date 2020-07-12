@@ -4,6 +4,12 @@ const { default: baseReducer } = require('../../utils/BaseReducer');
 export const initialState = { components: [], pages: {}, activePage: null };
 
 const createReducer = baseReducer(initialState, {
+  [CreateActions.GET_COMPONENTS_FINISHED](state, action) {
+    return {
+      ...state,
+      components: action.payload?.data?.data || [],
+    };
+  },
   [CreateActions.ADD_COMPONENT](state, action) {
     return {
       ...state,

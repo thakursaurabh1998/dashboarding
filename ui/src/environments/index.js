@@ -10,7 +10,9 @@ class BaseEnv {
       sample: `${this._baseApi}/${this._baseRoute}/sample`,
       getUser: `${this._baseApi}/${this._baseRoute}/user`,
       page: `${this._baseApi}/${this._baseRoute}/create/page`,
+      component: `${this._baseApi}/${this._baseRoute}/create/component`,
       getAllCreatedPages: `${this._baseApi}/${this._baseRoute}/create/pages`,
+      getAllCreatedComponents: `${this._baseApi}/${this._baseRoute}/create/components`,
     };
   }
 }

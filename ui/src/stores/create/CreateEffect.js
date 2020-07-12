@@ -20,3 +20,8 @@ export async function editPage(page) {
   const endpoint = environment.api.page;
   return await HttpUtility.post(endpoint, page);
 }
+
+export async function getComponents(pageID) {
+  const endpoint = environment.api.component;
+  return await HttpUtility.get(endpoint, pageID);
+}

@@ -71,3 +71,17 @@ export function updateActivePage(key) {
     dispatch(ActionUtility.createAction(UPDATE_ACTIVE_PAGE, key));
   };
 }
+
+export const GET_COMPONENTS = 'CreateActions.GET_COMPONENTS';
+export const GET_COMPONENTS_FINISHED = 'CreateActions.GET_COMPONENTS_FINISHED';
+
+export function getComponents(pageID) {
+  return async (dispatch) => {
+    await ActionUtility.createThunkEffect(
+      dispatch,
+      GET_COMPONENTS,
+      CreateEffect.getComponents,
+      { pageID }
+    );
+  };
+}
