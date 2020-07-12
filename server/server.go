@@ -32,6 +32,8 @@ func customHTTPErrorHandler(err error, c echo.Context) {
 	email := os.Getenv("MAINTAINER_EMAIL")
 	if code == http.StatusInternalServerError {
 		c.JSON(code, echo.Map{"message": fmt.Sprintf("Our servers must have been tired by now, please email this to me at %s and I'll give them a boost", email)})
+	} else if code == http.StatusUnauthorized {
+		c.JSON(code, echo.Map{"message": fmt.Sprintf("Invalid Authorization Bearer Token")})
 	} else {
 		c.JSON(code, echo.Map{"message": fmt.Sprintf("Oopsie! Somethings wrong, email me at %s to find out", email)})
 	}
