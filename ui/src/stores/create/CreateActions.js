@@ -1,5 +1,5 @@
-import * as CreateEffect from './CreateEffect';
-import * as ActionUtility from '../../utils/ActionUtility';
+import * as ActionUtility from 'utils/ActionUtility';
+import * as CreateEffect from 'stores/create/CreateEffect';
 
 export const ADD_COMPONENT = 'CreateActions.ADD_COMPONENT';
 

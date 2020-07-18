@@ -1,6 +1,7 @@
 import { combineReducers } from 'redux';
-import userReducer from './user/UserReducer';
-import createReducer from './create/CreateReducer';
+
+import userReducer from 'stores/user/UserReducer';
+import createReducer from 'stores/create/CreateReducer';
 
 const reducerMap = {
   // router: connectRouter(history), // check what's this

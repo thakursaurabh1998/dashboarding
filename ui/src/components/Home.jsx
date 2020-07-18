@@ -1,10 +1,10 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
-
-import logo from '../static/logo.svg';
 import { Button } from 'antd';
 import { Link } from 'react-router-dom';
-import RoutesEnum from '../constants/RoutesEnum';
+import { useSelector } from 'react-redux';
+
+import logo from 'static/logo.svg';
+import RoutesEnum from 'constants/RoutesEnum';
 
 export default function Home() {
   const { name } = useSelector((state) => ({

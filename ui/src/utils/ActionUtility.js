@@ -1,4 +1,4 @@
-import openNotification from './NotificationUtility';
+import openNotification from 'utils/NotificationUtility';
 
 export function createAction(
   type,

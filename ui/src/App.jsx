@@ -1,12 +1,11 @@
-import React from 'react';
-
-import 'antd/dist/antd.css';
-import './static/App.css';
-import Navbar from './components/Navbar/Navbar';
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import * as UserActions from './stores/user/UserActions';
-import RoutePage from './components/Extras/RoutePage';
+import 'antd/dist/antd.css';
+
+import 'static/App.css';
+import Navbar from 'components/Navbar/Navbar';
+import RoutePage from 'components/Extras/RoutePage';
+import * as UserActions from 'stores/user/UserActions';
 
 export default function App() {
   const dispatch = useDispatch();

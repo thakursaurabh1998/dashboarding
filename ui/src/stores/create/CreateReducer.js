@@ -1,5 +1,5 @@
-import * as CreateActions from './CreateActions';
-const { default: baseReducer } = require('../../utils/BaseReducer');
+import baseReducer from 'utils/BaseReducer';
+import * as CreateActions from 'stores/create/CreateActions';
 
 export const initialState = { components: [], pages: {}, activePage: null };
 

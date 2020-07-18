@@ -1,7 +1,8 @@
 import React from 'react';
 import { Input, Form } from 'antd';
 import PropTypes from 'prop-types';
-import TextArea from 'antd/lib/input/TextArea';
+
+const { TextArea } = Input;
 
 function InputComponent(meta) {
   return (

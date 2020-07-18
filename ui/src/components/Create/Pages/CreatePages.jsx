@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Row, Card, Tabs, Button, Col, Typography, Input } from 'antd';
-import * as CreateActions from '../../../stores/create/CreateActions';
-import AddPageModal from './AddPageModal';
-import { useEffect } from 'react';
+
+import AddPageModal from 'components/Create/Pages/AddPageModal';
+import * as CreateActions from 'stores/create/CreateActions';
 
 const { TabPane } = Tabs;
 

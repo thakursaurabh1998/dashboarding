@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { TreeSelect, Button, Row, Col } from 'antd';
-import { AntDComponents } from '../../../constants/AntDComponents';
-import * as CreateActions from '../../../stores/create/CreateActions';
-import openNotification from '../../../utils/NotificationUtility';
-import AddComponentModal from './AddComponentModal';
+
+import { AntDComponents } from 'constants/AntDComponents';
+import * as CreateActions from 'stores/create/CreateActions';
+import openNotification from 'utils/NotificationUtility';
+import AddComponentModal from 'components/Create/Components/AddComponentModal';
 
 export default function CreateComponents() {
   const dispatch = useDispatch();

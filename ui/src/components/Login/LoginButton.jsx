@@ -1,11 +1,11 @@
 import React from 'react';
-import { createUseStyles } from 'react-jss';
-
-import * as UserActions from '../../stores/user/UserActions';
-import { setAuthorizationToken } from '../../utils/LocalStorage';
 import { useDispatch } from 'react-redux';
+import { createUseStyles } from 'react-jss';
 import { useHistory } from 'react-router-dom';
-import RoutesEnum from '../../constants/RoutesEnum';
+
+import RoutesEnum from 'constants/RoutesEnum';
+import * as UserActions from 'stores/user/UserActions';
+import { setAuthorizationToken } from 'utils/LocalStorage';
 
 const useStyles = createUseStyles({
   googleButton: {

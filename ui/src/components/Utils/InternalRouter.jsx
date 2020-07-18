@@ -1,14 +1,15 @@
 import React, { lazy, Suspense } from 'react';
 import { useSelector } from 'react-redux';
 import { Switch, Route, Redirect } from 'react-router-dom';
-import RoutesEnum from '../../constants/RoutesEnum';
-import Create from '../Create/Create';
-import Loading from '../Extras/Loading';
-import LoginPopup from '../Login/LoginPopup';
-import NotFound from '../Extras/NotFound';
 
-const Home = lazy(() => import('../Home'));
-const Profile = lazy(() => import('../Profile/Profile'));
+import RoutesEnum from 'constants/RoutesEnum';
+import Create from 'components/Create/Create';
+import Loading from 'components/Extras/Loading';
+import LoginPopup from 'components/Login/LoginPopup';
+import NotFound from 'components/Extras/NotFound';
+
+const Home = lazy(() => import('components/Home'));
+const Profile = lazy(() => import('components/Profile/Profile'));
 
 function NewRoute(path, component) {
   return {

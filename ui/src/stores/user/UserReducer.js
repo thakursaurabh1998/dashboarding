@@ -1,5 +1,5 @@
-import baseReducer from '../../utils/BaseReducer';
-import * as UserActions from './UserActions';
+import baseReducer from 'utils/BaseReducer';
+import * as UserActions from 'stores/user/UserActions';
 
 export const initialState = {};
 

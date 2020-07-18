@@ -1,6 +1,6 @@
-import * as HttpUtility from '../../utils/HttpUtility';
-import environment from '../../environments';
-import { getAuthorizationToken } from '../../utils/LocalStorage';
+import environment from 'environments';
+import * as HttpUtility from 'utils/HttpUtility';
+import { getAuthorizationToken } from 'utils/LocalStorage';
 
 export async function getUserData() {
   const endpoint = environment.api.getUser;

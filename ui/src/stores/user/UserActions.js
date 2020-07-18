@@ -1,5 +1,5 @@
-import * as UserEffect from './UserEffect';
-import * as ActionUtility from '../../utils/ActionUtility';
+import * as ActionUtility from 'utils/ActionUtility';
+import * as UserEffect from 'stores/user/UserEffect';
 
 export const FETCH_USER = 'UserActions.FETCH_USER';
 export const FETCH_USER_FINISHED = 'UserActions.FETCH_USER_FINISHED';

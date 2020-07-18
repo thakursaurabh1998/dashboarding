@@ -1,5 +1,5 @@
-import environment from '../../environments';
-import * as HttpUtility from '../../utils/HttpUtility';
+import environment from 'environments';
+import * as HttpUtility from 'utils/HttpUtility';
 
 export async function getCreatedPages() {
   const endpoint = environment.api.getAllCreatedPages;

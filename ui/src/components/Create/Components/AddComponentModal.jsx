@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Input, Modal, Form, Radio, Select, Row, Divider } from 'antd';
-import { componentsMeta } from '../../../constants/AntDComponents';
+
+import { componentsMeta } from 'constants/AntDComponents';
 
 const Option = Select.Option;
 

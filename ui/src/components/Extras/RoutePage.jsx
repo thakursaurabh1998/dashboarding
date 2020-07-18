@@ -1,6 +1,7 @@
 import React from 'react';
-import InternalRouter from '../Utils/InternalRouter';
 import { createUseStyles } from 'react-jss';
+
+import InternalRouter from 'components/Utils/InternalRouter';
 
 const useStyles = createUseStyles({
   pages: {

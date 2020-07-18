@@ -1,6 +1,7 @@
-import { createStore, applyMiddleware, compose } from 'redux';
-import reducer from './rootReducer';
 import thunk from 'redux-thunk';
+import { createStore, applyMiddleware, compose } from 'redux';
+
+import reducer from 'stores/rootReducer';
 
 const loggerMiddleware = (store) => (next) => (action) => {
   console.group(action.type);

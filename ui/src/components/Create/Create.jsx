@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Divider, Collapse, Row, Col } from 'antd';
-import CreatePages from './Pages/CreatePages';
-import DisplayComponent from './Components/DisplayComponent';
-import CreateComponents from './Components/CreateComponents';
-import * as CreateActions from '../../stores/create/CreateActions';
+
+import CreatePages from 'components/Create/Pages/CreatePages';
+import DisplayComponent from 'components/Create/Components/DisplayComponent';
+import CreateComponents from 'components/Create/Components/CreateComponents';
+import * as CreateActions from 'stores/create/CreateActions';
 
 const { Panel } = Collapse;
 

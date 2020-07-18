@@ -1,14 +1,14 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Menu, Avatar } from 'antd';
-import { LockOutlined, HomeFilled, UserOutlined } from '@ant-design/icons';
-import { useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { useHistory } from 'react-router-dom';
-import RoutesEnum from '../../constants/RoutesEnum';
 import PropTypes from 'prop-types';
-import { deleteAuthorizationToken } from '../../utils/LocalStorage';
-import * as UserActions from '../../stores/user/UserActions';
-import LoginButton from '../Login/LoginButton';
+import { useHistory } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { LockOutlined, HomeFilled, UserOutlined } from '@ant-design/icons';
+
+import RoutesEnum from 'constants/RoutesEnum';
+import { deleteAuthorizationToken } from 'utils/LocalStorage';
+import * as UserActions from 'stores/user/UserActions';
+import LoginButton from 'components/Login/LoginButton';
 
 const { SubMenu } = Menu;
 
