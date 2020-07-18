@@ -1,7 +1,7 @@
 package handler
 
 import (
-	"github.com/thakursaurabh1998/dashboarding/server/store"
+	"github.com/thakursaurabh1998/dashboarding/store"
 )
 
 // Handler contains all the functions required for the routes

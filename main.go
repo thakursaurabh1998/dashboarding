@@ -11,7 +11,7 @@ import (
 )
 
 func main() {
-	port := "5000"
+	port := os.Getenv("HTTP_PORT")
 
 	logger := utils.InitLogger()
 	logger.Info("Starting the application")

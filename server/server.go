@@ -9,7 +9,7 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 
-	"github.com/thakursaurabh1998/dashboarding/server/connections"
+	"github.com/thakursaurabh1998/dashboarding/connections"
 	"github.com/thakursaurabh1998/dashboarding/server/router"
 	"github.com/thakursaurabh1998/dashboarding/server/utils"
 )

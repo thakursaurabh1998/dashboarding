@@ -3,7 +3,7 @@ package store
 import (
 	"context"
 
-	"github.com/thakursaurabh1998/dashboarding/server/models"
+	"github.com/thakursaurabh1998/dashboarding/models"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
