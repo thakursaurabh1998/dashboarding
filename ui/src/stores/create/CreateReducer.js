@@ -16,10 +16,14 @@ const createReducer = baseReducer(initialState, {
       components,
     };
   },
-  [CreateActions.ADD_COMPONENT](state, action) {
+  [CreateActions.ADD_COMPONENT_FINISHED](state, action) {
+    const component = action.meta[0];
     return {
       ...state,
-      components: [...state.components, action.payload],
+      components: {
+        ...state.components,
+        [component.key]: component,
+      },
     };
   },
   [CreateActions.GET_PAGES_FINISHED](state, action) {

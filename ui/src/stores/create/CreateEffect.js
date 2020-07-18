@@ -25,3 +25,8 @@ export async function getComponents(pageID) {
   const endpoint = environment.api.getAllCreatedComponents;
   return await HttpUtility.get(endpoint, pageID);
 }
+
+export async function addComponent(component) {
+  const endpoint = environment.api.component;
+  return await HttpUtility.put(endpoint, component);
+}

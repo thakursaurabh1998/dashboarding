@@ -1,7 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { useDispatch, useSelector } from 'react-redux';
 import { Input, Modal, Form, Radio, Select, Divider } from 'antd';
 
+import openNotification from 'utils/NotificationUtility';
+import * as CreateActions from 'stores/create/CreateActions';
 import { componentsMeta } from 'constants/AntDComponents';
 
 const Option = Select.Option;
@@ -57,11 +60,39 @@ export default function AddComponentModal({
   isModalVisible,
   setModalVisible,
 }) {
+  const dispatch = useDispatch();
   const [form] = Form.useForm();
 
+  const { pages, activePage } = useSelector((state) => ({
+    pages: state.create?.pages,
+    activePage: state.create?.activePage,
+  }));
+
   const onCreate = (data) => {
-    console.log(data);
-    // dispatch(CreateActions.addComponent(selectedValue));
+    const componentData = {
+      name: component,
+      key: data.key,
+      label: data.label,
+      pageID: pages[activePage].id,
+      meta: {
+        display: Object.keys(componentsMeta[component].display).reduce(
+          (config, key) => {
+            config[key] = data[key];
+            return config;
+          },
+          {}
+        ),
+        rules: Object.keys(componentsMeta[component].rules).reduce(
+          (config, key) => {
+            config[key] = data[key];
+            return config;
+          },
+          {}
+        ),
+      },
+    };
+
+    dispatch(CreateActions.addComponent(componentData));
 
     setModalVisible(false);
     return true;
@@ -85,7 +116,7 @@ export default function AddComponentModal({
       okText="Create"
       cancelText="Cancel"
       visible={isModalVisible}
-      title="Create a new component"
+      title={`Create a new ${component} component`}
       onCancel={() => setModalVisible(false)}
     >
       <Form

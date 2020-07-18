@@ -1,14 +1,6 @@
 import * as ActionUtility from 'utils/ActionUtility';
 import * as CreateEffect from 'stores/create/CreateEffect';
 
-export const ADD_COMPONENT = 'CreateActions.ADD_COMPONENT';
-
-export function addComponent(value) {
-  return async (dispatch) => {
-    dispatch(ActionUtility.createAction(ADD_COMPONENT, value));
-  };
-}
-
 export const GET_PAGES = 'CreateActions.GET_PAGES';
 export const GET_PAGES_FINISHED = 'CreateActions.GET_PAGES_FINISHED';
 
@@ -82,6 +74,20 @@ export function getComponents(pageID) {
       GET_COMPONENTS,
       CreateEffect.getComponents,
       { pageID }
+    );
+  };
+}
+
+export const ADD_COMPONENT = 'CreateActions.ADD_COMPONENT';
+export const ADD_COMPONENT_FINISHED = 'CreateActions.ADD_COMPONENT_FINISHED';
+
+export function addComponent(component) {
+  return async (dispatch) => {
+    await ActionUtility.createThunkEffect(
+      dispatch,
+      ADD_COMPONENT,
+      CreateEffect.addComponent,
+      component
     );
   };
 }
