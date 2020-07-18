@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
 import { Input, Modal, Form } from 'antd';
-import * as CreateActions from '../../stores/create/CreateActions';
+import * as CreateActions from '../../../stores/create/CreateActions';
 
 export default function AddPageModal({
   route,

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Row, Card, Tabs, Button, Col, Typography, Input } from 'antd';
-import * as CreateActions from '../../stores/create/CreateActions';
+import * as CreateActions from '../../../stores/create/CreateActions';
 import AddPageModal from './AddPageModal';
 import { useEffect } from 'react';
 
