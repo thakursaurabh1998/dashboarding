@@ -1,13 +1,19 @@
 import baseReducer from 'utils/BaseReducer';
 import * as CreateActions from 'stores/create/CreateActions';
 
-export const initialState = { components: [], pages: {}, activePage: null };
+export const initialState = { components: {}, pages: {}, activePage: null };
 
 const createReducer = baseReducer(initialState, {
   [CreateActions.GET_COMPONENTS_FINISHED](state, action) {
+    const receivedData = action.payload?.data?.data || [];
+    const components = receivedData.reduce((all, comp) => {
+      all[comp.key] = comp;
+      return all;
+    }, {});
+
     return {
       ...state,
-      components: action.payload?.data?.data || [],
+      components,
     };
   },
   [CreateActions.ADD_COMPONENT](state, action) {

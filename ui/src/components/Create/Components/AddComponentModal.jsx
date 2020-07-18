@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Input, Modal, Form, Radio, Select, Row, Divider } from 'antd';
+import { Input, Modal, Form, Radio, Select, Divider } from 'antd';
 
 import { componentsMeta } from 'constants/AntDComponents';
 
@@ -20,11 +20,7 @@ function FormItem({ currentKey, value }) {
         },
       ]}
     >
-      {(type === String && !expectedValues && (
-        <Row>
-          <Input type="text" />
-        </Row>
-      )) ||
+      {(type === String && !expectedValues && <Input type="text" />) ||
         (type === String && expectedValues && (
           <Select>
             {expectedValues.map((opt) => (
@@ -98,6 +94,41 @@ export default function AddComponentModal({
         name="add_page_modal"
         initialValues={meta?.initialValues}
       >
+        <Divider
+          orientation="left"
+          style={{ color: '#333', fontWeight: 'normal' }}
+        >
+          <h3>Properties</h3>
+        </Divider>
+
+        <Form.Item
+          key="label"
+          label="Label"
+          name="label"
+          rules={[
+            {
+              required: true,
+              message: 'Input missing!',
+            },
+          ]}
+        >
+          <Input type="text" />
+        </Form.Item>
+
+        <Form.Item
+          key="key"
+          label="Key"
+          name="key"
+          rules={[
+            {
+              required: true,
+              message: 'Input missing!',
+            },
+          ]}
+        >
+          <Input type="text" />
+        </Form.Item>
+
         <Divider
           orientation="left"
           style={{ color: '#333', fontWeight: 'normal' }}

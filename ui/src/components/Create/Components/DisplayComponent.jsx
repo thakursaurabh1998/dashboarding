@@ -5,21 +5,15 @@ import PropTypes from 'prop-types';
 const { TextArea } = Input;
 
 function InputComponent(meta) {
-  return (
-    <Input
-      placeholder={meta?.placeholder}
-      key={meta?.key}
-      hidden={meta?.hidden}
-    ></Input>
-  );
+  return <Input {...meta}></Input>;
 }
 
-function TextAreaComponent(meta) {
+function TextAreaComponent(display) {
   return (
     <TextArea
-      placeholder={meta?.placeholder}
-      key={meta?.key}
-      hidden={meta?.hidden}
+      placeholder={display?.placeholder}
+      key={display?.key}
+      hidden={display?.hidden}
     ></TextArea>
   );
 }
@@ -36,17 +30,18 @@ export default function DisplayComponent({ components }) {
     <Form form={form} layout="vertical" name="demo_form">
       {components.map((component) => (
         <Form.Item
-          key={component.label}
-          name={component.label}
+          key={component.key}
+          name={component.key}
           label={component.label}
           rules={[
             {
-              required: component.required,
+              ...component?.meta?.rules,
               message: 'Field empty!',
             },
           ]}
         >
-          {componentNameToFunctionMap[component.name](component.meta)}
+          {componentNameToFunctionMap[component.name] &&
+            componentNameToFunctionMap[component.name](component.meta.display)}
         </Form.Item>
       ))}
     </Form>

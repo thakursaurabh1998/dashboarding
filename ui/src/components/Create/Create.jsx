@@ -16,7 +16,7 @@ export default function Create() {
   const { activePage, pages, components } = useSelector((state) => ({
     pages: state.create.pages,
     activePage: state.create.activePage,
-    components: state.create.components,
+    components: Object.values(state.create.components),
   }));
 
   useEffect(() => {

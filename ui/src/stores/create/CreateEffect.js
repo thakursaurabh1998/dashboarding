@@ -22,6 +22,6 @@ export async function editPage(page) {
 }
 
 export async function getComponents(pageID) {
-  const endpoint = environment.api.component;
+  const endpoint = environment.api.getAllCreatedComponents;
   return await HttpUtility.get(endpoint, pageID);
 }
