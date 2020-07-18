@@ -112,9 +112,10 @@ func (h *Handler) AddComponent(c echo.Context) error {
 	if err := c.Bind(&m); err != nil {
 		return err
 	}
-	pageID, key, label, meta := m["pageID"].(string), m["key"].(string), m["label"].(string), m["meta"].(map[string]interface{})
-
-	page, err := h.componentStore.AddComponent(pageID, key, label, meta)
+	pageID, key := m["pageID"].(string), m["key"].(string)
+	label, name := m["label"].(string), m["name"].(string)
+	meta := m["meta"].(map[string]interface{})
+	page, err := h.componentStore.AddComponent(pageID, key, label, name, meta)
 	if err != nil {
 		utils.Logger.Error(err)
 		return c.JSON(http.StatusInternalServerError, createRes(false, nil, nil, http.StatusText(http.StatusInternalServerError)))

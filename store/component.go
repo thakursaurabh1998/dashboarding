@@ -18,7 +18,7 @@ type (
 	// ComponentStore is an interface for store functions
 	ComponentStore interface {
 		GetAllComponents(pageID string) ([]*models.Component, error)
-		AddComponent(pageID, key, label string, meta map[string]interface{}) (*mongo.InsertOneResult, error)
+		AddComponent(pageID, key, label, name string, meta map[string]interface{}) (*mongo.InsertOneResult, error)
 	}
 )
 
@@ -53,17 +53,21 @@ func (cs *componentStore) GetAllComponents(pageID string) ([]*models.Component, 
 	return components, nil
 }
 
-func (cs *componentStore) AddComponent(pageID, key, label string, meta map[string]interface{}) (*mongo.InsertOneResult, error) {
+func (cs *componentStore) AddComponent(pageID, key, label, name string, meta map[string]interface{}) (*mongo.InsertOneResult, error) {
 	pid, err := primitive.ObjectIDFromHex(pageID)
 	if err != nil {
 		return nil, err
 	}
 	component := models.Component{
+		Name:   name,
 		PageID: pid,
 		Key:    key,
 		Label:  label,
-		Meta:   meta,
 		ID:     primitive.NewObjectID(),
+		Meta: models.ComponentMeta{
+			Display: meta["display"].(map[string]interface{}),
+			Rules:   meta["rules"].(map[string]interface{}),
+		},
 	}
 
 	return componentCollection.InsertOne(context.TODO(), component)
